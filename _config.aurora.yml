@@ -1,0 +1,20 @@
+site:
+  subtitle: 陈晓珊的个人博客
+  author: 陈晓珊
+  nick: 猫里猫
+  description: 开发
+  language: cn
+  multi_language: false
+
+menu:
+  message:
+    name: 留言
+    path: /page/message-board
+
+aurora_bot:
+  enable: true
+  locale: cn
+  bot_type: dia
+
+theme:
+  profile_shape: circle
