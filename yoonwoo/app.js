@@ -142,8 +142,10 @@
     const right = `M${cx} ${topY} C${cx + size * .1} ${heartY - size * .91} ${cx + size * .65} ${heartY - size * 1.05} ${cx + size * .83} ${heartY - size * .51} C${cx + size} ${heartY - size * .06} ${cx + size * .23} ${heartY + size * .3} ${cx} ${bottomY}`;
     heartPaths.forEach((path, index) => {
       path.setAttribute('d', index === 0 ? left : right);
-      const length = path.getTotalLength(); path.style.strokeDasharray = `${length}`;
-      path.style.strokeDashoffset = `${length * (1 - morph)}`;
+      // Reveal a continuous outline: partial dash drawing looked like dark
+      // rectangles were masking the missing parts of the heart.
+      path.style.strokeDasharray = 'none';
+      path.style.strokeDashoffset = '0';
     });
     heart.style.opacity = morph;
     const crossingLabelOpacity = Math.sin(clamp((progress - crossingStart) / config.crossingDuration) * Math.PI);
@@ -152,6 +154,7 @@
     const afterFade = smooth((progress - crossingEnd) / .025);
     let latestDate = currentChapter === 2 ? config.after[0].date.slice(0, 4) : config.before[0].date.slice(0, 4), closest = Infinity;
     const sharedCards = [];
+    const foregroundCards = new Map();
     let focusDate = config.crossingDate, focusScore = -1;
     for (const item of cards) {
       const isBefore = item.phase === 'before';
@@ -192,6 +195,13 @@
         x = clamp(x, cardWidth * scale / 2 + 16, width - cardWidth * scale / 2 - 16);
       }
       item.button.hidden = false; item.button.disabled = fade < .25; item.button.style.opacity = fade;
+      // Each track has its own opaque foreground card. Only cards farther
+      // away keep distance transparency, so rails cannot show through focus.
+      const track = isBefore ? item.event.person : 'both';
+      const score = depth * fade;
+      if (!foregroundCards.has(track) || score > foregroundCards.get(track).score) {
+        foregroundCards.set(track, { button: item.button, score, phaseOpacity: opacity });
+      }
       item.button.style.zIndex = `${Math.round(depth * 100) + 5}`;
       item.button.style.transform = `translate3d(${x - cardWidth / 2}px,${y - cardHeight / 2}px,0) scale(${scale})`;
       if (!isBefore) {
@@ -206,6 +216,9 @@
       item.connector.style.width = `${Math.abs(nodeX - targetX)}px`;
       item.connector.style.transform = `translate(${Math.min(nodeX, targetX)}px,${y}px)`; item.connector.style.opacity = fade;
       if (Math.abs(z - 1.2) < closest) { closest = Math.abs(z - 1.2); latestDate = item.event.date.slice(0, 4); }
+    }
+    for (const foreground of foregroundCards.values()) {
+      foreground.button.style.opacity = foreground.phaseOpacity;
     }
     // Anchor the back of the stack just below the heart, moving the whole
     // group together so its existing overlap and perspective stay intact.
