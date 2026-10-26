@@ -98,6 +98,28 @@
     marker.append(dot, date); $('event-ticks').append(marker);
     return { marker, position };
   });
+  const meter=document.querySelector('.meter');
+  const ruler=document.createElement('div');ruler.className='meter-ruler';ruler.setAttribute('aria-hidden','true');
+  const rulerTicks=Array.from({length:161},(_,index)=>{
+    const tick=document.createElement('i');tick.style.left=`${index/160*100}%`;ruler.append(tick);return tick;
+  });
+  meter.prepend(ruler);
+  function waveAt(position){
+    rulerTicks.forEach((tick,index)=>{
+      const distance=position===null?Infinity:Math.abs(index/160-position);
+      tick.style.setProperty('--wave-height',`${4+28*Math.exp(-Math.pow(distance/.035,2))}px`);
+    });
+  }
+  meter.addEventListener('pointermove',event=>{
+    const marker=event.target.closest('.event-tick');
+    const entry=eventTicks.find(tick=>tick.marker===marker);
+    waveAt(entry ? entry.position : null);
+  });
+  meter.addEventListener('pointerleave',()=>waveAt(null));
+  meter.addEventListener('focusin',event=>{
+    const entry=eventTicks.find(tick=>tick.marker===event.target);if(entry)waveAt(entry.position);
+  });
+  meter.addEventListener('focusout',()=>waveAt(null));
   function scrollToProgress(p) { window.scrollTo({ top: p * (journey.offsetHeight - height), behavior: reducedMotion ? 'instant' : 'smooth' }); }
   $('jump').addEventListener('click', () => scrollToProgress(config.crossingAt + config.crossingDuration * .55));
   $('restart').addEventListener('click', () => scrollToProgress(0));
@@ -315,7 +337,14 @@
     }
     if (progress > .995) $('scroll-label').textContent = 'to be continue · 向上滚动，重温故事';
     $('progress').style.width = `${progress*100}%`;
-    for (const tick of eventTicks) tick.marker.classList.toggle('is-past', progress >= tick.position);
+    let activeTick=eventTicks.reduce((nearest,tick)=>Math.abs(tick.position-progress)<Math.abs(nearest.position-progress)?tick:nearest,eventTicks[0]);
+    for(const tick of eventTicks){
+      tick.marker.classList.toggle('is-past',progress>=tick.position);
+      tick.marker.classList.toggle('is-active',tick===activeTick);
+      if(tick===activeTick)tick.marker.setAttribute('aria-current','date');else tick.marker.removeAttribute('aria-current');
+    }
+    const activeIndex=Math.round(progress*160);
+    rulerTicks.forEach((tick,index)=>tick.classList.toggle('is-active',index===activeIndex));
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(draw); }
   window.addEventListener('scroll', schedule, { passive: true });

@@ -102,3 +102,24 @@ header .prototype{position:absolute;left:50%;transform:translateX(-50%)}
 #heart-year{display:none}
 
 #cards>.event:focus-visible{outline:none}
+
+/* A fine ruler with a local wave under the pointer. */
+.bottom{z-index:1000}
+.meter{background:none;height:38px;pointer-events:auto}
+.meter>#progress{display:none}
+.meter-ruler{position:absolute;inset:0;pointer-events:none}
+.meter-ruler i{position:absolute;top:50%;width:2px;height:var(--wave-height,4px);background:#777b82;opacity:.6;transform:translate(-50%,-50%);border-radius:2px;transition:height .16s ease,background .16s,opacity .16s}
+.meter-ruler i.is-active{background:var(--mix);opacity:1;min-height:20px}
+.journey-meter button.event-tick{top:50%;width:26px;height:48px;z-index:2}
+.event-tick .event-tick-dot{width:2px;height:12px;border-radius:2px;background:#9c9ba5;opacity:.7;box-shadow:none;transform:translate(-50%,-50%)}
+.event-tick.is-active .event-tick-dot{background:var(--mix);height:24px;opacity:1}
+.event-tick:hover .event-tick-dot,.event-tick:focus-visible .event-tick-dot{height:32px;transform:translate(-50%,-50%);opacity:1;background:var(--ink)}
+.event-tick time{opacity:.55;transition:opacity .16s,color .16s}
+.event-tick.is-active time,.event-tick:hover time,.event-tick:focus-visible time{opacity:1;color:var(--ink)}
+.event-tick[data-side=above] time{bottom:45px}
+.event-tick[data-side=below] time{top:42px}
+.tick-preview{bottom:103px}
+@media(prefers-reduced-motion:reduce){.meter-ruler i{transition:none}}
+
+.journey-meter{width:80vw;max-width:100%;position:relative;left:50%;transform:translateX(-50%)}
+.event-tick:focus-visible{outline:none}
