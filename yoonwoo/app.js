@@ -38,8 +38,13 @@
     const node = document.createElement('div'); node.className = 'timeline-node'; node.dataset.person = event.person;
     const time = document.createElement('time'); time.textContent = event.date; node.append(time);
     const connector = document.createElement('div'); connector.className = 'node-connector';
+    const pointer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    pointer.setAttribute('class', 'card-pointer'); pointer.setAttribute('aria-hidden', 'true');
+    const pointerShape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pointer.append(pointerShape);
+    button.prepend(pointer);
     cardsRoot.append(connector, node, button);
-    const item = { event, phase, button, node, connector }; cards.push(item);
+    const item = { event, phase, button, node, connector, pointer, pointerShape }; cards.push(item);
   }
   config.before.forEach(event => createEvent(event, 'before'));
   config.after.forEach(event => createEvent(event, 'after'));
@@ -47,7 +52,11 @@
   const cardSpacing = clamp(config.cardSpacing ?? .16, .08, 1);
   const exitTravel = .5 / cardSpacing;
   const travelBefore = Math.max(...config.before.map(event => event.position)) + exitTravel;
-  const travelAfter = Math.max(...config.after.map(event => event.position)) + exitTravel;
+  // Continue the same spacing between the last two events into the ending.
+  const afterPositions = config.after.map(event => event.position).sort((a,b)=>a-b);
+  const endingSpacing = afterPositions.length > 1 ? afterPositions.at(-1)-afterPositions.at(-2) : 5;
+  const travelAfter = afterPositions.at(-1) + endingSpacing;
+  const sharedAngleStep = .14;
   const tickPreview = document.createElement('div');
   tickPreview.id = 'tick-preview'; tickPreview.className = 'tick-preview';
   tickPreview.setAttribute('role', 'tooltip'); tickPreview.hidden = true;
@@ -55,7 +64,7 @@
   function showTickPreview(item, marker) {
     const miniature = document.createElement('div');
     miniature.className = 'event'; miniature.dataset.person = item.event.person;
-    for (const child of item.button.children) miniature.append(child.cloneNode(true));
+    for (const child of item.button.children) if (!child.classList.contains('card-pointer')) miniature.append(child.cloneNode(true));
     tickPreview.replaceChildren(miniature); tickPreview.hidden = false;
     const bounds = document.querySelector('.bottom').getBoundingClientRect();
     const markerBounds = marker.getBoundingClientRect();
@@ -90,9 +99,8 @@
     return { marker, position };
   });
   function scrollToProgress(p) { window.scrollTo({ top: p * (journey.offsetHeight - height), behavior: reducedMotion ? 'instant' : 'smooth' }); }
-  $('jump').addEventListener('click', () => scrollToProgress(config.crossingAt + config.crossingDuration * .65));
+  $('jump').addEventListener('click', () => scrollToProgress(config.crossingAt + config.crossingDuration * .55));
   $('restart').addEventListener('click', () => scrollToProgress(0));
-  document.querySelector('.wordmark').addEventListener('click', event => { event.preventDefault(); scrollToProgress(0); });
   $('close-dialog').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
   function resize() {
@@ -111,7 +119,38 @@
     document.querySelector('.chapter').hidden = true;
   }
   function hide(item) {
-    item.button.hidden = true; item.button.disabled = true; item.node.hidden = true; item.connector.hidden = true;
+    item.button.hidden = true; item.button.disabled = true; item.node.hidden = true; item.connector.hidden = true; item.pointer.style.display = 'none';
+  }
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const dialGroup = document.createElementNS(svgNS, 'g');
+  dialGroup.id = 'dial-marks'; scene.append(dialGroup);
+  const tickPaths = ['a', 'b', 'both'].map(person => {
+    const path = document.createElementNS(svgNS, 'path');
+    path.setAttribute('class', `dial-ticks dial-ticks-${person}`);
+    dialGroup.append(path); return path;
+  });
+  const unionArc = document.createElementNS(svgNS, 'path');
+  unionArc.id = 'union-arc'; unionArc.setAttribute('stroke', 'url(#union-color)');
+  dialGroup.prepend(unionArc);
+  function point(cx, cy, r, angle, mirror = 1) {
+    return { x: cx + mirror * Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
+  }
+  function arc(cx, cy, radius, from, to, mirror = 1) {
+    const points = Array.from({ length: 81 }, (_, i) => point(cx, cy, radius, mix(from, to, i / 80), mirror));
+    return points.map((p, i) => `${i ? 'L' : 'M'}${p.x} ${p.y}`).join(' ');
+  }
+  function marks(cx, cy, r, from, to, rotation, mirror = 1) {
+    const step = Math.PI / 90;
+    let path = '';
+    const shift = ((rotation % step) + step) % step;
+    for (let i = -110; i <= 110; i++) {
+      const angle = i * step + shift;
+      if (angle < from || angle > to) continue;
+      const p = point(cx, cy, r, angle, mirror);
+      const q = point(cx, cy, r + (i % 5 === 0 ? 15 : 7), angle, mirror);
+      path += `M${p.x} ${p.y}L${q.x} ${q.y}`;
+    }
+    return path;
   }
   function draw() {
     raf = 0;
@@ -122,126 +161,160 @@
     const after = progress >= crossingEnd;
     chapter(progress < crossingStart ? 0 : after ? 2 : 1);
     const cx = width / 2;
-    const originY = height * .12;
-    const nearY = height * .82;
-    const endGap = Math.min(width * .035, 26);
-    // Spread the two tracks across the viewport instead of a narrow center column.
-    const spread = width * .43 - endGap;
-    const gap = endGap * (1 - morph), extent = spread * (1 - morph);
-    const startY = mix(originY, height * .45, morph);
-    aRail.setAttribute('d', `M${cx - gap - extent} ${startY} L${cx - gap} ${nearY}`);
-    bRail.setAttribute('d', `M${cx + gap + extent} ${startY} L${cx + gap} ${nearY}`);
-    $('rails').style.opacity = 1 - morph;
-    const heartY = mix(height * .40, height * .18, morph), size = Math.min(width * .13, height * .08, 64);
-    const unionGradient = $('union-color');
-    unionGradient.setAttribute('gradientUnits', 'userSpaceOnUse');
-    unionGradient.setAttribute('x1', cx - size); unionGradient.setAttribute('x2', cx + size);
-    unionGradient.setAttribute('y1', heartY); unionGradient.setAttribute('y2', heartY);
-    const bottomY = heartY + size * .55, topY = heartY - size * .2;
-    const left = `M${cx} ${topY} C${cx - size * .1} ${heartY - size * .91} ${cx - size * .65} ${heartY - size * 1.05} ${cx - size * .83} ${heartY - size * .51} C${cx - size} ${heartY - size * .06} ${cx - size * .23} ${heartY + size * .3} ${cx} ${bottomY}`;
-    const right = `M${cx} ${topY} C${cx + size * .1} ${heartY - size * .91} ${cx + size * .65} ${heartY - size * 1.05} ${cx + size * .83} ${heartY - size * .51} C${cx + size} ${heartY - size * .06} ${cx + size * .23} ${heartY + size * .3} ${cx} ${bottomY}`;
-    heartPaths.forEach((path, index) => {
-      path.setAttribute('d', index === 0 ? left : right);
-      // Reveal a continuous outline: partial dash drawing looked like dark
-      // rectangles were masking the missing parts of the heart.
-      path.style.strokeDasharray = 'none';
-      path.style.strokeDashoffset = '0';
+    const mobile = width <= 600;
+    const r = width * (mobile ? .28 : .29);
+    const sideY = height * .49;
+    const sideX = -r * .40;
+    const centerY = height * 1.04;
+    const unionRadius = Math.min(width * .49, height * .52);
+    const travelA = progress / crossingStart * travelBefore;
+    const travelB = (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
+    const beforeOpacity = 1 - smooth((progress - crossingStart) / (config.crossingDuration * .55));
+    const afterOpacity = smooth((progress - (crossingEnd - .035)) / .035);
+    const transition = clamp((progress-crossingStart)/config.crossingDuration);
+    const gather = smooth(transition/.55);
+    const unfold = smooth((transition-.55)/.45);
+    const finalHeartY = centerY-unionRadius*.46;
+    const heartY = mix(height*.43, finalHeartY, unfold);
+    const size = Math.min(52, width*.085, unionRadius*.16);
+    const left = `M${cx} ${heartY-size*.15} C${cx-size*.2} ${heartY-size} ${cx-size*1.1} ${heartY-size*.75} ${cx-size*.8} ${heartY} C${cx-size*.6} ${heartY+size*.4} ${cx-size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
+    const right = `M${cx} ${heartY-size*.15} C${cx+size*.2} ${heartY-size} ${cx+size*1.1} ${heartY-size*.75} ${cx+size*.8} ${heartY} C${cx+size*.6} ${heartY+size*.4} ${cx+size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
+    heartPaths.forEach((path,i)=>{path.setAttribute('d',i?right:left);path.style.strokeDasharray='none';});
+    const gradient=$('union-color');
+    gradient.setAttribute('gradientUnits','userSpaceOnUse');
+    gradient.setAttribute('x1',cx-size);gradient.setAttribute('x2',cx+size);
+    gradient.setAttribute('y1',0);gradient.setAttribute('y2',0);
+    // Match sample counts so both side arcs continuously become the two
+    // heart lobes, then unfold into the left/right halves of the bottom dial.
+    [aRail,bRail].forEach((rail,side)=>{
+      const mirror=side===0?1:-1;
+      const ox=side===0?sideX:width-sideX;
+      const heartPath=heartPaths[side],length=heartPath.getTotalLength();
+      const points=Array.from({length:81},(_,i)=>{
+        const u=i/80;
+        const original=point(ox,sideY,r,mix(-1.45,1.45,u),mirror);
+        const h=heartPath.getPointAtLength(length*u);
+        const union=point(cx,centerY,unionRadius,mix(-Math.PI/2,side===0?-Math.PI+.12:-.12,u));
+        return {x:mix(mix(original.x,h.x,gather),union.x,unfold),y:mix(mix(original.y,h.y,gather),union.y,unfold)};
+      });
+      rail.setAttribute('stroke',transition>0?(side===0?'#e6faff':'#fde6ff'):(side===0?'url(#blue-line)':'url(#red-line)'));
+      rail.style.strokeWidth=mix(1.5,3.5,gather*(1-unfold));
+      rail.setAttribute('d',points.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join(' '));
     });
-    heart.style.opacity = morph;
-    const crossingLabelOpacity = Math.sin(clamp((progress - crossingStart) / config.crossingDuration) * Math.PI);
-    $('crossing-label').style.opacity = crossingLabelOpacity;
-    const beforeFade = 1 - smooth((progress - (crossingStart - .035)) / .035);
-    const afterFade = smooth((progress - crossingEnd) / .025);
-    let latestDate = currentChapter === 2 ? config.after[0].date.slice(0, 4) : config.before[0].date.slice(0, 4), closest = Infinity;
-    const sharedCards = [];
-    const foregroundCards = new Map();
+    // Crossfade the dial ticks into continuous curves for the joining motion.
+    const lineIn=smooth(transition/.12);
+    const dialIn=smooth((transition-.85)/.15);
+    $('rails').style.opacity=lineIn*(1-dialIn);
+    tickPaths[0].setAttribute('d',marks(sideX,sideY,r,-1.45,1.45,travelA*.11));
+    tickPaths[1].setAttribute('d',marks(width-sideX,sideY,r,-1.45,1.45,travelA*.11,-1));
+    tickPaths[0].style.opacity=1-lineIn;tickPaths[1].style.opacity=1-lineIn;
+    unionArc.setAttribute('d',arc(cx,centerY,unionRadius,-Math.PI+.12,-.12));
+    unionArc.style.opacity=0;
+    tickPaths[2].setAttribute('d',marks(cx,centerY,unionRadius,-Math.PI+.12,-.12,-travelB*sharedAngleStep));
+    tickPaths[2].style.opacity=dialIn;
+    heart.style.opacity=unfold;
+    $('crossing-label').style.opacity=Math.sin(transition*Math.PI);
+    $('crossing-label').style.top=`${height*.43+size*.85+30}px`;
+    const foreground = new Map();
     let focusDate = config.crossingDate, focusScore = -1;
     for (const item of cards) {
-      const isBefore = item.phase === 'before';
-      const opacity = isBefore ? beforeFade : afterFade;
-      if (opacity < .001 || (isBefore && after) || (!isBefore && !after)) { hide(item); continue; }
-      const travel = isBefore ? progress / crossingStart * travelBefore : (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
-      // Compress depth without changing event order or the timeline phases.
-      const z = (item.event.position - travel) * cardSpacing;
-      if (z < -.4 || z > 10) { hide(item); continue; }
-      const depth = 1 / (1 + Math.max(z, -.4) * .7);
-      const vanY = isBefore ? originY : bottomY;
-      let y = isBefore
-        ? originY + (nearY - originY) * Math.min(depth, 1)
-        : vanY + (height * 1.03 - vanY) * depth;
-      const scale = isBefore ? Math.min(.96, depth * 1.15) : Math.min(.96, depth * .96);
-      // Fade the entire card with distance, including its image and text.
-      const distanceOpacity = clamp(Math.pow(depth, 1.35), .12, 1);
-      const fade = opacity * distanceOpacity * smooth((10 - z) / 3) * smooth((z + .4) / .4);
-      if (fade < .015) { hide(item); continue; }
-      const cardWidth = isBefore
-        ? (width <= 600 ? width * .45 : width * .36)
-        : width;
-      item.button.hidden = false;
-      const cardHeight = item.button.offsetHeight;
-      if (isBefore) {
-        // Keep the foreground cards above the bottom navigation.
-        y = Math.min(y, height * .86 - cardHeight * scale / 2);
+      const before = item.phase === 'before';
+      const phaseOpacity = before ? beforeOpacity : afterOpacity;
+      if (phaseOpacity < .001) { hide(item); continue; }
+      const delta = (before ? travelA : travelB) - item.event.position;
+      const angle = before ? delta * .11 : -Math.PI / 2 - delta * sharedAngleStep;
+      const distance = Math.abs(delta * (before ? .11 : sharedAngleStep));
+      if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
+      const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
+      const scale = 1 - Math.min(.24, distance * .15);
+      const cardWidth = mobile ? Math.min(180, width * .25) : Math.min(310, width * .20);
+      const cardHeight = mobile ? Math.min(220, height * .27) : Math.min(300, height * .32);
+      item.button.style.width = `${cardWidth}px`; item.button.style.height = `${cardHeight}px`;
+      item.button.style.minHeight = '0'; item.button.hidden = false;
+      let center, node, rotation, inner;
+      if (before) {
+        const mirror = item.event.person === 'a' ? 1 : -1;
+        const ox = mirror === 1 ? sideX : width - sideX;
+        node = point(ox, sideY, r, angle, mirror);
+        center = point(ox, sideY, r + cardWidth * .50 + 32, angle, mirror);
+        rotation = mirror * angle;
+        inner = point(ox, sideY, r - (mobile ? 32 : 44), angle, mirror);
+      } else {
+        node = point(cx, centerY, unionRadius, angle);
+        center = point(cx, centerY, unionRadius + cardHeight * .50 + 32, angle);
+        rotation = angle + Math.PI / 2;
+        inner = point(cx, centerY, unionRadius - (mobile ? 32 : 44), angle);
       }
-      if (!isBefore) {
-        y = vanY + 18 + cardHeight * scale / 2 + height * .1 * Math.min(depth, 1);
-      }
-      let x = cx, nodeX = cx;
-      if (isBefore) {
-        const direction = item.event.person === 'a' ? -1 : 1;
-        // Use the same inward-facing geometry as the drawn rail.
-        nodeX = cx + direction * (endGap + spread * (nearY - y) / (nearY - originY));
-        x = nodeX + direction * (cardWidth * scale / 2 + 20);
-        x = clamp(x, cardWidth * scale / 2 + 16, width - cardWidth * scale / 2 - 16);
-      }
-      item.button.hidden = false; item.button.disabled = fade < .25; item.button.style.opacity = fade;
-      // Each track has its own opaque foreground card. Only cards farther
-      // away keep distance transparency, so rails cannot show through focus.
-      const track = isBefore ? item.event.person : 'both';
-      const score = depth * fade;
-      if (!foregroundCards.has(track) || score > foregroundCards.get(track).score) {
-        foregroundCards.set(track, { button: item.button, score, phaseOpacity: opacity });
-      }
-      item.button.style.zIndex = `${Math.round(depth * 100) + 5}`;
-      item.button.style.transform = `translate3d(${x - cardWidth / 2}px,${y - cardHeight / 2}px,0) scale(${scale})`;
-      if (!isBefore) {
-        sharedCards.push({ button: item.button, x, y, cardWidth, cardHeight, scale });
-        const score = depth * fade;
-        if (score > focusScore) { focusScore = score; focusDate = item.event.date; }
-      }
-      item.button.style.filter = reducedMotion ? '' : `blur(${Math.max(0, z - 4) * .14}px)`;
-      item.node.hidden = !isBefore; item.connector.hidden = !isBefore;
-      item.node.style.transform = `translate(${nodeX - 3.5}px,${y - 3.5}px)`; item.node.style.opacity = fade;
-      const targetX = x + (item.event.person === 'a' ? 1 : -1) * cardWidth * scale / 2;
-      item.connector.style.width = `${Math.abs(nodeX - targetX)}px`;
-      item.connector.style.transform = `translate(${Math.min(nodeX, targetX)}px,${y}px)`; item.connector.style.opacity = fade;
-      if (Math.abs(z - 1.2) < closest) { closest = Math.abs(z - 1.2); latestDate = item.event.date.slice(0, 4); }
+      item.button.style.transform = `translate3d(${center.x-cardWidth/2}px,${center.y-cardHeight/2}px,0) rotate(${rotation}rad) scale(${scale})`;
+      item.button.style.opacity = fade * Math.max(.35, 1 - distance * .4);
+      item.button.style.filter = 'none';
+      item.button.style.zIndex = `${Math.round(100 - distance * 30)}`;
+      // Draw the card and its tail as one outline in the card's local coordinates.
+      const dx=(node.x-center.x)/scale,dy=(node.y-center.y)/scale;
+      const tx=cardWidth/2+dx*Math.cos(rotation)+dy*Math.sin(rotation);
+      const ty=cardHeight/2-dx*Math.sin(rotation)+dy*Math.cos(rotation);
+      const vx=tx-cardWidth/2,vy=ty-cardHeight/2;
+      const reach=Math.min(cardWidth/2/Math.max(.0001,Math.abs(vx)),cardHeight/2/Math.max(.0001,Math.abs(vy)));
+      const ex=cardWidth/2+vx*reach,ey=cardHeight/2+vy*reach;
+      const w=cardWidth,h=cardHeight,c=10,half=11;
+      // A short, rounded tip reads as part of the card rather than a needle.
+      const tail=(x,y,nx,ny,ux,uy)=>{
+        const ax=x-ux*half,ay=y-uy*half,bx=x+ux*half,by=y+uy*half;
+        const tipX=x+nx*12,tipY=y+ny*12;
+        const length=Math.hypot(half,12),round=4;
+        const p1x=tipX+(ax-tipX)/length*round,p1y=tipY+(ay-tipY)/length*round;
+        const p2x=tipX+(bx-tipX)/length*round,p2y=tipY+(by-tipY)/length*round;
+        return `L${ax} ${ay} L${p1x} ${p1y} Q${tipX} ${tipY} ${p2x} ${p2y} L${bx} ${by} `;
+      };
+      let top=`L${w-c} 0`,right=`L${w} ${h-c}`,bottom=`L${c} ${h}`,left=`L0 ${c}`;
+      if(Math.abs(ey)<.01){const x=clamp(ex,c+half,w-c-half);top=tail(x,0,0,-1,1,0)+top;}
+      else if(Math.abs(ex-w)<.01){const y=clamp(ey,c+half,h-c-half);right=tail(w,y,1,0,0,1)+right;}
+      else if(Math.abs(ey-h)<.01){const x=clamp(ex,c+half,w-c-half);bottom=tail(x,h,0,1,-1,0)+bottom;}
+      else {const y=clamp(ey,c+half,h-c-half);left=tail(0,y,-1,0,0,-1)+left;}
+      item.pointer.style.display='block';
+      item.pointer.setAttribute('width',w);item.pointer.setAttribute('height',h);
+      item.pointer.setAttribute('viewBox',`0 0 ${w} ${h}`);
+      item.pointerShape.setAttribute('d',`M${c} 0 ${top} Q${w} 0 ${w} ${c} ${right} Q${w} ${h} ${w-c} ${h} ${bottom} Q0 ${h} 0 ${h-c} ${left} Q0 0 ${c} 0 Z`);
+      const time=item.node.querySelector('time');
+      time.hidden=false;time.textContent=item.event.date.slice(5);
+      time.style.left=`${inner.x-node.x}px`;time.style.top=`${inner.y-node.y}px`;
+
+      item.button.disabled = fade < .3;
+      item.connector.hidden = true;
+      item.node.hidden = false;
+      item.node.style.transform = `translate(${node.x}px,${node.y}px)`;
+      item.node.style.opacity = fade;
+      const key = before ? item.event.person : 'both';
+      if (!foreground.has(key) || distance < foreground.get(key).distance) foreground.set(key, { item, distance, phaseOpacity });
+      if (!before && 1-distance > focusScore) { focusScore=1-distance; focusDate=item.event.date; }
     }
-    for (const foreground of foregroundCards.values()) {
-      foreground.button.style.opacity = foreground.phaseOpacity;
+    for (const {item, phaseOpacity} of foreground.values()) { item.button.style.opacity = phaseOpacity; }
+    const beforeDate = foreground.get('a') || foreground.get('b');
+    const currentDate = after ? focusDate : beforeDate ? beforeDate.item.event.date : config.crossingDate;
+    $('current-date').textContent = currentDate.slice(0,4);
+    const date = $('heart-date'); date.hidden = !after;
+    date.style.left = `${cx}px`; date.style.top = `${centerY-unionRadius*.76}px`;
+    date.dateTime = focusDate.replaceAll('.', '-');
+    $('heart-year').textContent = focusDate.slice(0,4); $('heart-day').textContent = focusDate.slice(5);
+    $('scroll-label').textContent = after ? '滚动向左，翻阅共同的时间' : '向下滚动，转动彼此的时间';
+    const ending = $('ending-card');
+    // The ending is the next item on the same orbital track. At the end
+    // of the scroll its angle reaches the dial's top, just like a focus card.
+    const endingDelta = (travelB - travelAfter) * sharedAngleStep;
+    const endingDistance = Math.abs(endingDelta);
+    const endingAngle = -Math.PI / 2 - endingDelta;
+    ending.hidden = !after || endingDistance > 1.38;
+    if (!ending.hidden) {
+      const endingHeight = ending.offsetHeight;
+      const endingCenter = point(cx, centerY, unionRadius + endingHeight * .5 + 32, endingAngle);
+      const endingScale = 1 - Math.min(.24, endingDistance * .15);
+      ending.style.left = `${endingCenter.x}px`;
+      ending.style.top = `${endingCenter.y}px`;
+      ending.style.opacity = afterOpacity * (1 - smooth((endingDistance - .95) / .5));
+      ending.style.transform = `translate(-50%,-50%) rotate(${endingAngle + Math.PI/2}rad) scale(${endingScale})`;
     }
-    // Anchor the back of the stack just below the heart, moving the whole
-    // group together so its existing overlap and perspective stay intact.
-    if (sharedCards.length) {
-      const backTop = Math.min(...sharedCards.map(card => card.y - card.cardHeight * card.scale / 2));
-      const lift = Math.max(0, backTop - bottomY - 18);
-      for (const card of sharedCards) {
-        card.button.style.transform = `translate3d(${card.x - card.cardWidth / 2}px,${card.y - card.cardHeight / 2 - lift}px,0) scale(${card.scale})`;
-      }
-    }
-    if (currentChapter === 1) latestDate = config.crossingDate.slice(0, 4);
-    if (progress > .995) { latestDate = config.after.at(-1).date.slice(0, 4); $('scroll-label').textContent = '故事未完，回望每一个交点'; }
-    else $('scroll-label').textContent = '向下滚动，沿时间向前';
-    if (after && focusScore < 0) focusDate = config.after.at(-1).date;
-    const heartDate = $('heart-date');
-    heartDate.hidden = !after;
-    heartDate.style.left = `${cx}px`;
-    heartDate.style.top = `${heartY + size * .04}px`;
-    heartDate.dateTime = focusDate.replaceAll('.', '-');
-    $('heart-year').textContent = focusDate.slice(0, 4);
-    $('heart-day').textContent = focusDate.slice(5);
-    $('current-date').textContent = latestDate;
-    $('progress').style.width = `${progress * 100}%`;
+    if (progress > .995) $('scroll-label').textContent = 'to be continue · 向上滚动，重温故事';
+    $('progress').style.width = `${progress*100}%`;
     for (const tick of eventTicks) tick.marker.classList.toggle('is-past', progress >= tick.position);
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(draw); }

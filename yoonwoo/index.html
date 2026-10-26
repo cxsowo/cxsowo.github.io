@@ -9,12 +9,16 @@
 <main id="journey">
 <section class="stage" aria-label="双人时间线，向下滚动推进时间">
 <div class="grain" aria-hidden="true"></div><div class="ambient" aria-hidden="true"></div>
-<header><a class="wordmark" href="#" aria-label="回到时间线起点">相逢的轨迹<span>THE LINES THAT LED TO US</span></a><span class="prototype">交互概念 / 虚构事件</span><button id="jump" type="button">前往交汇 <span aria-hidden="true">↗</span></button></header>
+<header><span class="prototype">交互概念 / 虚构事件</span><button id="jump" type="button">前往交汇 <span aria-hidden="true">↗</span></button></header>
 <div class="chapter"><span id="chapter-number">CHAPTER 01 — BEFORE US</span><h1 id="chapter-title">在相遇之前</h1><p id="chapter-copy">两段各自向前的时间，尚未写下彼此的名字。</p></div>
 <svg id="scene" aria-hidden="true"><defs><linearGradient id="blue-line" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e6faff" stop-opacity=".12"/><stop offset=".6" stop-color="#e6faff"/><stop offset="1" stop-color="#e6faff" stop-opacity=".1"/></linearGradient><linearGradient id="red-line" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde6ff" stop-opacity=".12"/><stop offset=".6" stop-color="#fde6ff"/><stop offset="1" stop-color="#fde6ff" stop-opacity=".1"/></linearGradient><linearGradient id="union-color" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e6faff"/><stop offset=".43" stop-color="#edf3ff"/><stop offset=".56" stop-color="#f3edff"/><stop offset="1" stop-color="#fde6ff"/></linearGradient></defs><g id="rails"><path id="rail-a" stroke="url(#blue-line)"/><path id="rail-b" stroke="url(#red-line)"/></g><g id="heart"><path class="heart-line" stroke="url(#union-color)"/><path class="heart-line" stroke="url(#union-color)"/></g></svg>
 <time id="heart-date" hidden aria-label="当前焦点事件日期"><span id="heart-year"></span><span id="heart-day"></span></time>
 <div id="crossing-label"><span>THE MOMENT WE MET</span><strong id="crossing-date"></strong><p>从此，两条时间有了同一处坐标。</p></div>
 <div id="cards" aria-label="时间线事件"></div>
+<div id="ending-card" hidden aria-label="to be continue">
+<svg viewBox="0 0 260 240" aria-hidden="true"><defs><linearGradient id="ending-border"><stop stop-color="#e6faff"/><stop offset=".5" stop-color="#f2f0ff"/><stop offset="1" stop-color="#fde6ff"/></linearGradient><linearGradient id="ending-fill" x2="1" y2="1"><stop stop-color="#283944"/><stop offset=".5" stop-color="#252732"/><stop offset="1" stop-color="#3b2d40"/></linearGradient></defs><path d="M130 224 C108 205 20 150 14 87 C8 22 93 2 130 64 C167 2 252 22 246 87 C240 150 152 205 130 224 Z" fill="url(#ending-fill)" stroke="url(#ending-border)" stroke-width="2"/></svg>
+<span>to be continue</span>
+</div>
 <div class="bottom"><div class="scroll-cue"><span class="mouse" aria-hidden="true"></span><span id="scroll-label">向下滚动，沿时间向前</span></div><div class="era"><span id="current-date">2023</span><span id="phase-label">各自的序章</span></div><div class="journey-meter"><span>起点</span><div class="meter"><i id="progress"></i><span id="event-ticks" aria-label="事件日期"></span></div><button id="restart" type="button">回到起点 ↑</button></div></div>
 </section>
 </main>
