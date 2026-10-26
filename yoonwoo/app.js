@@ -11,6 +11,39 @@
   const heartPaths = [...heart.querySelectorAll('.heart-line')];
   const cardsRoot = $('cards');
   let width = 0, height = 0, progress = 0, raf = 0, currentChapter = -1;
+  // A fixed seed keeps the sky stable when the page reloads.
+  let starSeed=427;
+  const starRandom=()=>{starSeed=(starSeed*1664525+1013904223)>>>0;return starSeed/4294967296;};
+  const starFragment=document.createDocumentFragment();
+  for(let index=0;index<115;index++){
+    const star=document.createElement('i');
+    const size=index%17===0?2.4:.8+starRandom()*1.1;
+    star.style.cssText=`left:${starRandom()*100}%;top:${starRandom()*100}%;--star-size:${size}px;--star-duration:${3.5+starRandom()*6}s;--star-delay:${-starRandom()*12}s;--star-brightness:${.35+starRandom()*.45}`;
+    starFragment.append(star);
+  }
+  $('starfield').append(starFragment);
+  const skyStars=[...$('starfield').children];
+  const recentSparkles=[];
+  let sparkleTimer;
+  function sparkle(){
+    if(document.hidden || reducedMotion)return;
+    const visibleCount=window.innerWidth<=600?75:skyStars.length;
+    const candidates=skyStars.slice(0,visibleCount).filter(star=>!star.classList.contains('is-sparkling')&&!recentSparkles.includes(star));
+    const star=candidates[Math.floor(Math.random()*candidates.length)];
+    if(star){
+      star.style.setProperty('--sparkle-duration',`${1.8+Math.random()*1.5}s`);
+      star.classList.add('is-sparkling');recentSparkles.push(star);
+      if(recentSparkles.length>16)recentSparkles.shift();
+    }
+    sparkleTimer=setTimeout(sparkle,650+Math.random()*1250);
+  }
+  $('starfield').addEventListener('animationend',event=>{
+    if(event.animationName==='star-cross-twinkle')event.target.classList.remove('is-sparkling');
+  });
+  document.addEventListener('visibilitychange',()=>{
+    clearTimeout(sparkleTimer);if(!document.hidden&&!reducedMotion)sparkle();
+  });
+  if(!reducedMotion)sparkle();
   const cards = [];
   const labelFor = event => event.person === 'both' ? `${config.people.a} + ${config.people.b} · 共同事件` : `${config.people[event.person]} · 个人事件`;
   const artworkLabels = { mountain: 'Somewhere, a beginning', window: 'A window into time', moon: 'Under the same moon', union: 'Two lives, one moment' };
@@ -146,6 +179,10 @@
   const svgNS = 'http://www.w3.org/2000/svg';
   const dialGroup = document.createElementNS(svgNS, 'g');
   dialGroup.id = 'dial-marks'; scene.append(dialGroup);
+  const dialClip=document.createElementNS(svgNS,'clipPath');dialClip.id='dial-content-clip';
+  const dialClipRect=document.createElementNS(svgNS,'rect');dialClip.append(dialClipRect);
+  scene.querySelector('defs').append(dialClip);
+  dialGroup.setAttribute('clip-path','url(#dial-content-clip)');
   const tickPaths = ['a', 'b', 'both'].map(person => {
     const path = document.createElementNS(svgNS, 'path');
     path.setAttribute('class', `dial-ticks dial-ticks-${person}`);
@@ -183,11 +220,14 @@
     const after = progress >= crossingEnd;
     chapter(progress < crossingStart ? 0 : after ? 2 : 1);
     const cx = width / 2;
+    const navigationTop=meter.getBoundingClientRect().top-document.querySelector('.stage').getBoundingClientRect().top;
+    dialClipRect.setAttribute('width',width);
+    dialClipRect.setAttribute('height',Math.max(0,navigationTop-28));
     const mobile = width <= 600;
     const r = width * (mobile ? .28 : .29);
     const sideY = height * .49;
     const sideX = -r * .40;
-    const centerY = height * 1.04;
+    const centerY = height * (mobile ? .94 : 1.04);
     const unionRadius = Math.min(width * .49, height * .52);
     const travelA = progress / crossingStart * travelBefore;
     const travelB = (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
@@ -196,9 +236,9 @@
     const transition = clamp((progress-crossingStart)/config.crossingDuration);
     const gather = smooth(transition/.55);
     const unfold = smooth((transition-.55)/.45);
-    const finalHeartY = centerY-unionRadius*.46;
+    const finalHeartY = centerY-unionRadius*(mobile ? .64 : .46);
     const heartY = mix(height*.43, finalHeartY, unfold);
-    const size = Math.min(52, width*.085, unionRadius*.16);
+    const size = Math.min(mobile ? 32 : 52, width*.085, unionRadius*.16);
     const left = `M${cx} ${heartY-size*.15} C${cx-size*.2} ${heartY-size} ${cx-size*1.1} ${heartY-size*.75} ${cx-size*.8} ${heartY} C${cx-size*.6} ${heartY+size*.4} ${cx-size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
     const right = `M${cx} ${heartY-size*.15} C${cx+size*.2} ${heartY-size} ${cx+size*1.1} ${heartY-size*.75} ${cx+size*.8} ${heartY} C${cx+size*.6} ${heartY+size*.4} ${cx+size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
     heartPaths.forEach((path,i)=>{path.setAttribute('d',i?right:left);path.style.strokeDasharray='none';});
@@ -249,8 +289,8 @@
       if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
       const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
       const scale = 1 - Math.min(.24, distance * .15);
-      const cardWidth = mobile ? Math.min(180, width * .25) : Math.min(310, width * .20);
-      const cardHeight = mobile ? Math.min(220, height * .27) : Math.min(300, height * .32);
+      const cardWidth = mobile ? Math.min(180, width * .32) : Math.min(310, width * .20);
+      const cardHeight = mobile ? Math.min(220, height * .28) : Math.min(300, height * .32);
       item.button.style.width = `${cardWidth}px`; item.button.style.height = `${cardHeight}px`;
       item.button.style.minHeight = '0'; item.button.hidden = false;
       let center, node, rotation, inner;
@@ -311,9 +351,12 @@
       if (!before && 1-distance > focusScore) { focusScore=1-distance; focusDate=item.event.date; }
     }
     for (const {item, phaseOpacity} of foreground.values()) { item.button.style.opacity = phaseOpacity; }
-    const beforeDate = foreground.get('a') || foreground.get('b');
+    const beforeDate = [foreground.get('a'),foreground.get('b')].filter(Boolean).sort((a,b)=>a.distance-b.distance)[0];
     const currentDate = after ? focusDate : beforeDate ? beforeDate.item.event.date : config.crossingDate;
     $('current-date').textContent = currentDate.slice(0,4);
+    const displayedDate = progress >= crossingStart && !after ? config.crossingDate : currentDate;
+    $('current-time').textContent = displayedDate;
+    $('current-time').dateTime = displayedDate.replaceAll('.', '-');
     const date = $('heart-date'); date.hidden = !after;
     date.style.left = `${cx}px`; date.style.top = `${centerY-unionRadius*.76}px`;
     date.dateTime = focusDate.replaceAll('.', '-');

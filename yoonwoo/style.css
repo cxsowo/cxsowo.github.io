@@ -123,3 +123,36 @@ header .prototype{position:absolute;left:50%;transform:translateX(-50%)}
 
 .journey-meter{width:80vw;max-width:100%;position:relative;left:50%;transform:translateX(-50%)}
 .event-tick:focus-visible{outline:none}
+
+/* Quiet, independently twinkling stars behind the timeline. */
+.starfield{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.starfield>i{position:absolute;width:var(--star-size);height:var(--star-size);border-radius:50%;background:#e6faff;box-shadow:0 0 5px #c8deff55;opacity:.2;animation:star-twinkle var(--star-duration) ease-in-out var(--star-delay) infinite}
+.starfield>i:nth-child(3n){background:#fde6ff}
+.starfield>i.is-sparkling{background:#f5f6ff;box-shadow:0 0 7px #e6faffaa,0 0 16px #c9d6ff55;animation:star-cross-twinkle var(--sparkle-duration,2.5s) ease-in-out both}
+.starfield>i.is-sparkling::before,.starfield>i.is-sparkling::after{content:'';position:absolute;left:50%;top:50%;width:2px;height:22px;--ray-angle:0deg;background:linear-gradient(transparent 0%,#dceeff88 28%,#ffffff 50%,#dceeff88 72%,transparent 100%);filter:drop-shadow(0 0 3px #dceeffaa);transform:translate(-50%,-50%) rotate(var(--ray-angle)) scale(.3);opacity:0;animation:star-cross-rays var(--sparkle-duration,2.5s) ease-in-out both}
+.starfield>i.is-sparkling::after{--ray-angle:90deg;height:18px}
+@keyframes star-cross-twinkle{0%,30%,72%,100%{opacity:.2}47%,53%{opacity:1}}
+@keyframes star-cross-rays{0%,30%,72%,100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--ray-angle)) scale(.3)}47%,53%{opacity:1;transform:translate(-50%,-50%) rotate(var(--ray-angle)) scale(1)}}
+@keyframes star-twinkle{0%,100%{opacity:.1}45%,55%{opacity:var(--star-brightness)}}
+@media(max-width:600px){.starfield>i:nth-child(n+76){display:none}}
+@media(prefers-reduced-motion:reduce){.starfield>i{animation:none;opacity:.35}}
+
+@media(prefers-reduced-motion:reduce){.starfield>i.is-sparkling{animation:none;opacity:.6}.starfield>i.is-sparkling::before,.starfield>i.is-sparkling::after{animation:none;opacity:.35;transform:translate(-50%,-50%) rotate(var(--ray-angle)) scale(.65)}}
+
+.scroll-cue,.era,#heart-date{display:none!important}
+#current-time{position:absolute;left:50%;top:35px;transform:translateX(-50%);color:var(--ink);font:600 22px Georgia,serif;letter-spacing:3px;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media(max-width:600px){#current-time{top:28px;font-size:17px;letter-spacing:2px}}
+
+@media(max-width:600px){
+  #cards>.event{display:flex;flex-direction:column}
+  #cards>.event .art{flex:1;min-height:42px;height:0}
+  #cards>.event .event-head{flex:none;font-size:8px;margin-top:8px}
+  #cards>.event h2{flex:none;font-size:13px;line-height:1.45;margin:7px 2px 3px}
+  #cards>.event .art::after{font-size:9px}
+  .event-tick time{display:none}
+  .event-tick.is-active time,.event-tick:hover time,.event-tick:focus-visible time{display:block}
+  .event-tick[data-side=above] time,.event-tick[data-side=below] time{top:43px;bottom:auto}
+  .journey-meter{gap:9px}
+  .tick-preview{width:180px}
+}
+#cards>.event[hidden]{display:none}
