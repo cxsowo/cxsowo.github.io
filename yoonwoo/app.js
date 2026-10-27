@@ -1,6 +1,15 @@
 (() => {
   'use strict';
-  const config = window.TIMELINE_CONFIG;
+  // Date order determines sequence; elapsed time and stored positions never set spacing.
+  const evenTimeline=(events,offset=0)=>{
+    const dates=[...new Set(events.map(event=>event.date))].sort();
+    const positions=new Map(dates.map((date,index)=>[date,offset+index*5]));
+    return events.map(event=>({...event,position:positions.get(event.date)})).sort((a,b)=>a.date.localeCompare(b.date));
+  };
+  const config = {...window.TIMELINE_CONFIG,
+    before:evenTimeline(window.TIMELINE_CONFIG.before),
+    after:evenTimeline(window.TIMELINE_CONFIG.after,3)
+  };
   // Keep a long shared history from stretching the short solo introduction.
   const timelineUnits=config.before.length+config.after.length+4;
   const timelineCrossingAt=config.after.length>20?Math.max(.1,config.before.length/timelineUnits):config.crossingAt;
@@ -11,9 +20,9 @@
   const tr = key => locales[language][key] ?? locales.zh[key];
   const eventContent = event => {
     const translation=event.i18n?.[language] ?? window.TIMELINE_EVENT_TRANSLATIONS?.[event.id]?.[language];
-    return { title:translation?.title || event.title, text:translation?.text || event.text };
+    return { title:translation?.title || event.title, text:translation?.text || event.text, blocks:translation?.blocks ?? event.blocks };
   };
-  let openedEvent=null, galleryEvent=null, galleryIndex=0;
+  let openedEvent=null, galleryStates=[],detailEventId=null;
   const personName = key => config.peopleI18n?.[language]?.[key] || config.people[key];
   const dateText = value => value==='现在' ? ({zh:'现在',en:'Now',ko:'현재'})[language] : value;
   const shortDate = value => {
@@ -76,7 +85,7 @@
   const artworkLabels = { mountain: 'Somewhere, a beginning', window: 'A window into time', moon: 'Under the same moon', union: 'Two lives, one moment' };
   function createEvent(event, phase) {
     const button = document.createElement('button');
-    button.type = 'button'; button.className = 'event'; button.dataset.person = event.person;
+    button.type = 'button'; button.className = 'event'; button.dataset.person = event.person; button.dataset.phase=phase;
     button.setAttribute('aria-label', `${event.date}，${labelFor(event)}，${event.title}，查看详情`);
     const art = document.createElement('div'); art.className = `art ${event.art}`; art.setAttribute('aria-hidden', 'true');
     const moon = document.createElement('i'); moon.className = 'moon'; if (event.art !== 'window' && event.art !== 'union') art.append(moon);
@@ -90,12 +99,9 @@
     const date = document.createElement('time'); setDate(date,event.date);
     const owner = document.createElement('span'); owner.textContent = event.person === 'both' ? tr('pairName') : personName(event.person); head.append(date, owner);
     const title = document.createElement('h2'); title.textContent = event.title;
-    const copy = document.createElement('p'); copy.textContent = event.text;
-    const foot = document.createElement('div'); foot.className = 'card-footer';
-    const arrow = document.createElement('b'); arrow.textContent = '↗'; arrow.setAttribute('aria-hidden','true'); foot.append(arrow);
-    button.append(art, head, title, copy, foot);
+    button.append(art, head, title);
     button.addEventListener('click', () => {
-      openedEvent=event; updateDetail(event); dialog.showModal();
+      openedEvent=event; updateDetail(event); dialog.showModal();$('detail-content').scrollTop=0;
     });
     const node = document.createElement('div'); node.className = 'timeline-node'; node.dataset.person = event.person;
     const time = document.createElement('time'); time.textContent = event.date; node.append(time);
@@ -103,6 +109,15 @@
     const pointer = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     pointer.setAttribute('class', 'card-pointer'); pointer.setAttribute('aria-hidden', 'true');
     const pointerShape = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    if(phase==='after'){
+      const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+      const gradient=$('union-color').cloneNode(true);gradient.id=`card-hover-${event.id}`;
+      gradient.setAttribute('gradientUnits','objectBoundingBox');
+      gradient.setAttribute('x1','0%');gradient.setAttribute('x2','100%');
+      gradient.setAttribute('y1','0%');gradient.setAttribute('y2','0%');
+      defs.append(gradient);pointer.append(defs);
+      button.style.setProperty('--hover-border',`url(#${gradient.id})`);
+    }
     pointer.append(pointerShape);
     button.prepend(pointer);
     cardsRoot.append(connector, node, button);
@@ -114,10 +129,8 @@
   const cardSpacing = clamp(config.cardSpacing ?? .16, .08, 1);
   const exitTravel = .5 / cardSpacing;
   const travelBefore = Math.max(...config.before.map(event => event.position)) + exitTravel;
-  // Continue the same spacing between the last two events into the ending.
-  const afterPositions = config.after.map(event => event.position).sort((a,b)=>a-b);
-  const endingSpacing = afterPositions.length > 1 ? afterPositions.at(-1)-afterPositions.at(-2) : 5;
-  const travelAfter = afterPositions.at(-1) + endingSpacing;
+  // The ending is one regular slot after the last date.
+  const travelAfter = Math.max(0,...config.after.map(event=>event.position)) + 5;
   const sharedAngleStep = .14;
   const tickPreview = document.createElement('div');
   tickPreview.id = 'tick-preview'; tickPreview.className = 'tick-preview';
@@ -125,7 +138,7 @@
   document.querySelector('.bottom').append(tickPreview);
   function showTickPreview(item, marker) {
     const miniature = document.createElement('div');
-    miniature.className = 'event'; miniature.dataset.person = item.event.person;
+    miniature.className = 'event'; miniature.dataset.person = item.event.person; miniature.dataset.phase=item.phase;
     for (const child of item.button.children) if (!child.classList.contains('card-pointer')) miniature.append(child.cloneNode(true));
     tickPreview.replaceChildren(miniature); tickPreview.hidden = false;
     const bounds = document.querySelector('.bottom').getBoundingClientRect();
@@ -136,6 +149,8 @@
     marker.setAttribute('aria-describedby', tickPreview.id);
   }
   function hideTickPreview(marker) { tickPreview.hidden = true; marker.removeAttribute('aria-describedby'); }
+  const rulerColor=position=>`color-mix(in srgb,var(--blue) ${(1-clamp(position))*100}%,var(--red))`;
+  const rulerIntervals=160;
   const eventTicks = cards.map((item, index) => {
     const crossingStart = clamp(timelineCrossingAt, .1, .8);
     const crossingEnd = Math.min(.95, crossingStart + timelineCrossingDuration);
@@ -146,54 +161,79 @@
     marker.type = 'button';
     marker.className = 'event-tick';
     marker.dataset.side = index % 2 ? 'below' : 'above';
-    marker.style.left = `${position * 100}%`;
+    const rulerIndex=Math.round(position*rulerIntervals);
+    marker.style.left = `${rulerIndex/rulerIntervals*100}%`;
+    marker.style.setProperty('--ruler-color',rulerColor(position));
     marker.setAttribute('aria-label', `跳转到 ${item.event.date}，${item.event.title}`);
     marker.addEventListener('pointerenter', () => showTickPreview(item, marker));
     marker.addEventListener('pointerleave', () => hideTickPreview(marker));
     marker.addEventListener('focus', () => showTickPreview(item, marker));
     marker.addEventListener('blur', () => hideTickPreview(marker));
     marker.addEventListener('click', () => { hideTickPreview(marker); scrollToProgress(position); });
-    const dot = document.createElement('span'); dot.className = 'event-tick-dot';
     const date = document.createElement('time');
     setDate(date,item.event.date);date.textContent=shortDate(item.event.date);
-    marker.append(dot, date); $('event-ticks').append(marker);
-    return { marker, position };
+    marker.append(date); $('event-ticks').append(marker);
+    return { marker, position, rulerIndex };
   });
+  function createDetailGallery(block,blockIndex,event,initialIndex=0){
+    const section=$('detail-gallery-template').content.firstElementChild.cloneNode(true);
+    const photo=section.querySelector('.gallery-image'),counter=section.querySelector('.gallery-counter');
+    const thumbs=section.querySelector('.gallery-thumbs');
+    const images=block.images.map(image=>typeof image==='string'?{src:image,alt:''}:image);
+    const state={blockIndex,index:initialIndex,show:null};
+    const caption=block.label||tr(event.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum');
+    section.setAttribute('aria-label',caption);
+    for(const gradient of section.querySelectorAll('linearGradient')){
+      const side=gradient.id.includes('prev')?'prev':'next';
+      gradient.id=`gallery-${side}-${event.id}-${blockIndex}`;
+      if(dialog.dataset.phase==='after')section.querySelector(`.gallery-${side}`).style.setProperty('--gallery-heart-stroke',`url(#${gradient.id})`);
+    }
+    const buttons=images.map((image,index)=>{
+      const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`${tr('photo')} ${index+1}`);
+      const thumb=document.createElement('img');thumb.src=image.src;thumb.alt='';thumb.loading='lazy';button.append(thumb);
+      button.addEventListener('click',()=>{state.index=index;state.show();});thumbs.append(button);return button;
+    });
+    thumbs.style.gridTemplateColumns=`repeat(${Math.min(images.length,6)},minmax(0,1fr))`;
+    state.show=()=>{
+      state.index=(state.index+images.length)%images.length;
+      photo.src=images[state.index].src;photo.alt=images[state.index].alt||`${ownerFor(event)} · ${caption} ${state.index+1}`;
+      counter.textContent=`${state.index+1} / ${images.length}`;
+      buttons.forEach((button,index)=>button.setAttribute('aria-pressed',String(index===state.index)));
+    };
+    for(const [side,step]of [['prev',-1],['next',1]]){
+      const button=section.querySelector(`.gallery-${side}`);button.setAttribute('aria-label',tr(side==='prev'?'previousPhoto':'nextPhoto'));
+      button.addEventListener('click',()=>{state.index+=step;state.show();});
+    }
+    section.addEventListener('keydown',event=>{
+      if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();event.stopPropagation();state.index+=event.key==='ArrowLeft'?-1:1;state.show();}
+    });
+    state.show();galleryStates.push(state);return section;
+  }
   function updateDetail(event){
-    const content=eventContent(event);
-    $('detail-owner').textContent=ownerFor(event);$('detail-date').textContent=event.date;
-    setDate($('detail-date'),event.date);
-    $('detail-title').textContent=content.title;$('detail-copy').textContent=content.text;
-    if(galleryEvent!==event){galleryEvent=event;galleryIndex=0;}
-    const gallery=$('detail-gallery');gallery.hidden=!event.images?.length;
-    $('gallery-thumbs').replaceChildren();
-    if(!gallery.hidden){
-      event.images.forEach((src,index)=>{
-        const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`${tr('photo')} ${index+1}`);
-        const image=document.createElement('img');image.src=src;image.alt='';image.loading='lazy';button.append(image);
-        button.addEventListener('click',()=>{galleryIndex=index;showGalleryPhoto();});$('gallery-thumbs').append(button);
-      });
-      $('gallery-prev').setAttribute('aria-label',tr('previousPhoto'));$('gallery-next').setAttribute('aria-label',tr('nextPhoto'));
-      gallery.setAttribute('aria-label',tr(event.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum'));showGalleryPhoto();
-    }
-
+    dialog.dataset.phase=config.before.some(item=>item.id===event.id)?'before':'after';
+    dialog.dataset.person=event.person;
+    const content=eventContent(event),scrollTop=$('detail-content').scrollTop;
+    const previousIndices=detailEventId===event.id?new Map(galleryStates.map(state=>[state.blockIndex,state.index])):new Map();
+    detailEventId=event.id;galleryStates=[];
+    $('detail-owner').textContent=ownerFor(event);setDate($('detail-date'),event.date);
+    $('detail-title').textContent=content.title;
+    const blocks=content.blocks??[
+      ...(content.text?[{type:'text',text:content.text}]:[]),
+      ...(event.images?.length?[{type:'gallery',images:event.images}]:[])
+    ];
+    const fragment=document.createDocumentFragment();
+    blocks.forEach((block,index)=>{
+      if(block.type==='text'){
+        const paragraph=document.createElement('p');paragraph.className='detail-text';paragraph.textContent=block.text||'';fragment.append(paragraph);
+      }else if(block.type==='image'){
+        const figure=document.createElement('figure'),image=document.createElement('img');figure.className='detail-image';
+        image.src=block.src;image.alt=block.alt||'';image.loading='lazy';image.decoding='async';figure.append(image);fragment.append(figure);
+      }else if(block.type==='gallery'&&block.images?.length){
+        fragment.append(createDetailGallery(block,index,event,previousIndices.get(index)||0));
+      }
+    });
+    $('detail-content').replaceChildren(fragment);$('detail-content').scrollTop=scrollTop;
   }
-  function showGalleryPhoto(){
-    if(!galleryEvent?.images?.length)return;
-    const images=galleryEvent.images;galleryIndex=(galleryIndex+images.length)%images.length;
-    $('gallery-image').src=images[galleryIndex];
-    $('gallery-image').alt=`${labelFor(galleryEvent)} · ${tr(galleryEvent.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum')} ${galleryIndex+1}`;
-    $('gallery-counter').textContent=`${galleryIndex+1} / ${images.length}`;
-    [...$('gallery-thumbs').children].forEach((button,index)=>button.setAttribute('aria-pressed',String(index===galleryIndex)));
-  }
-  $('gallery-prev').addEventListener('click',()=>{galleryIndex--;showGalleryPhoto();});
-  $('gallery-next').addEventListener('click',()=>{galleryIndex++;showGalleryPhoto();});
-  dialog.addEventListener('keydown',event=>{
-    if($('detail-gallery').hidden)return;
-    if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
-      event.preventDefault();galleryIndex+=event.key==='ArrowLeft'?-1:1;showGalleryPhoto();
-    }
-  });
   function setLanguage(next){
     language=locales[next]?next:'zh';
     try{localStorage.setItem('yoonwoo-language',language);}catch{}
@@ -210,10 +250,10 @@
     $('close-about').setAttribute('aria-label',tr('closeAbout'));
     $('restart').textContent=tr('restart');$('close-dialog').setAttribute('aria-label',tr('close'));
     document.querySelector('#crossing-label>span').textContent=tr('moment');
-    document.querySelector('#crossing-label>p').textContent=eventContent(config.after.find(event=>event.id==='first-meeting')||{title:'',text:tr('crossing')}).text;
+    document.querySelector('#crossing-label>p').textContent=eventContent(config.after.find(event=>event.id==='first-meeting')||{title:'',text:tr('crossing')}).text?.split('\n\n')[0]||tr('crossing');
     for(const item of cards){
       const content=eventContent(item.event),button=item.button;
-      button.querySelector('h2').textContent=content.title;button.querySelector('p').textContent=content.text;
+      button.querySelector('h2').textContent=content.title;
       setDate(button.querySelector('.event-head time'),item.event.date);
       button.querySelector('.event-head>span').textContent=item.event.person==='both'?tr('pairName'):personName(item.event.person);
       button.querySelector('.art-caption').textContent=tr('artwork')[item.event.art] || tr('artwork').moon;
@@ -223,31 +263,16 @@
     document.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===language)));
     if(openedEvent&&dialog.open)updateDetail(openedEvent);
     tickPreview.hidden=true;
+    document.dispatchEvent(new CustomEvent('timeline-language-change',{detail:{language}}));
     schedule();
   }
   document.querySelectorAll('[data-language]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.language)));
   const meter=document.querySelector('.meter');
   const ruler=document.createElement('div');ruler.className='meter-ruler';ruler.setAttribute('aria-hidden','true');
-  const rulerTicks=Array.from({length:161},(_,index)=>{
-    const tick=document.createElement('i');tick.style.left=`${index/160*100}%`;ruler.append(tick);return tick;
+  const rulerTicks=Array.from({length:rulerIntervals+1},(_,index)=>{
+    const tick=document.createElement('i');tick.style.left=`${index/rulerIntervals*100}%`;tick.style.setProperty('--ruler-color',rulerColor(index/rulerIntervals));ruler.append(tick);return tick;
   });
   meter.prepend(ruler);
-  function waveAt(position){
-    rulerTicks.forEach((tick,index)=>{
-      const distance=position===null?Infinity:Math.abs(index/160-position);
-      tick.style.setProperty('--wave-height',`${4+28*Math.exp(-Math.pow(distance/.035,2))}px`);
-    });
-  }
-  meter.addEventListener('pointermove',event=>{
-    const marker=event.target.closest('.event-tick');
-    const entry=eventTicks.find(tick=>tick.marker===marker);
-    waveAt(entry ? entry.position : null);
-  });
-  meter.addEventListener('pointerleave',()=>waveAt(null));
-  meter.addEventListener('focusin',event=>{
-    const entry=eventTicks.find(tick=>tick.marker===event.target);if(entry)waveAt(entry.position);
-  });
-  meter.addEventListener('focusout',()=>waveAt(null));
   function scrollToProgress(p) { window.scrollTo({ top: p * (journey.offsetHeight - height), behavior: reducedMotion ? 'instant' : 'smooth' }); }
   $('restart').addEventListener('click', () => scrollToProgress(0));
   $('close-dialog').addEventListener('click', () => dialog.close());
@@ -292,6 +317,10 @@
   const dialClip=document.createElementNS(svgNS,'clipPath');dialClip.id='dial-content-clip';
   const dialClipRect=document.createElementNS(svgNS,'rect');dialClip.append(dialClipRect);
   scene.querySelector('defs').append(dialClip);
+  const dialGradient=$('union-color').cloneNode(true);dialGradient.id='dial-gradient';
+  dialGradient.setAttribute('gradientUnits','userSpaceOnUse');
+  dialGradient.setAttribute('y1','0');dialGradient.setAttribute('y2','0');
+  scene.querySelector('defs').append(dialGradient);
   dialGroup.setAttribute('clip-path','url(#dial-content-clip)');
   const tickPaths = ['a', 'b', 'both'].map(person => {
     const path = document.createElementNS(svgNS, 'path');
@@ -340,6 +369,7 @@
     const sideX = -r * .40;
     const centerY = height * (mobile ? .94 : 1.04);
     const unionRadius = Math.min(width * .49, height * .52);
+    dialGradient.setAttribute('x1',cx-unionRadius);dialGradient.setAttribute('x2',cx+unionRadius);
     const travelA = progress / crossingStart * travelBefore;
     const travelB = (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
     const beforeOpacity = 1 - smooth((progress - crossingStart) / (timelineCrossingDuration * .55));
@@ -378,7 +408,7 @@
         const union=point(cx,centerY,unionRadius,mix(-Math.PI/2,side===0?-Math.PI+.12:-.12,u));
         return {x:mix(mix(original.x,h.x,gather),union.x,unfold),y:mix(mix(original.y,h.y,gather),union.y,unfold)};
       });
-      rail.setAttribute('stroke',transition>0?(side===0?'#e6faff':'#fde6ff'):(side===0?'url(#blue-line)':'url(#red-line)'));
+      rail.setAttribute('stroke',transition>0?(side===0?'#5dd2f6':'#b43df5'):(side===0?'url(#blue-line)':'url(#red-line)'));
       rail.style.strokeWidth=mix(1.5,3.5,gather*(1-unfold));
       rail.setAttribute('d',points.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join(' '));
     });
@@ -408,7 +438,7 @@
       if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
       const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
       const scale = 1 - Math.min(.24, distance * .15);
-      const cardWidth = mobile ? Math.min(180, width * .34, height * .38) : compactCards ? Math.min(260, width * .28, height * .38) : Math.min(310, width * .20);
+      const cardWidth = mobile ? Math.min(200, width * .40, height * .38) : compactCards ? Math.min(260, width * .28, height * .38) : Math.min(310, width * .20);
       const cardHeight = compactCards ? cardWidth / 1.08 : Math.min(300, height * .32);
       item.button.style.width = `${cardWidth}px`; item.button.style.height = `${cardHeight}px`;
       item.button.style.setProperty('--card-width',`${cardWidth}px`);
@@ -505,7 +535,7 @@
       tick.marker.classList.toggle('is-active',tick===activeTick);
       if(tick===activeTick)tick.marker.setAttribute('aria-current','date');else tick.marker.removeAttribute('aria-current');
     }
-    const activeIndex=Math.round(progress*160);
+    const activeIndex=activeTick.rulerIndex;
     rulerTicks.forEach((tick,index)=>tick.classList.toggle('is-active',index===activeIndex));
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(draw); }
