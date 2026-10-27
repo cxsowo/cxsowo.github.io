@@ -1,0 +1,970 @@
+{
+  "source": "用户提供的七张时间线截图，2026-10-27 整理；同日合并为简短摘要，未补造缺失日期。",
+  "dateConflict": "截图写为 2026.05.23；用户于 2026-10-27 明确确认官宣成立日期为 2026.05.21，页面按用户确认日期展示。",
+  "entries": [
+    {
+      "date": "2026.01",
+      "title": "剧本围读期",
+      "text": "剧本围读期间频繁见面。（原记录待补资料）",
+      "en": {
+        "title": "Script readings",
+        "text": "They met frequently during script readings. Supporting material is still needed."
+      },
+      "ko": {
+        "title": "대본 리딩 기간",
+        "text": "대본 리딩 기간에 자주 만났다고 정리되어 있어요. 관련 자료는 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.02",
+      "title": "冬季拍摄记录",
+      "text": "更新表记载：剧集在冬季拍摄，整体拍摄期约为 1—3 月，并提到 2 月完成拍摄；具体开机、杀青日期待进一步补齐。",
+      "en": {
+        "title": "Winter filming notes",
+        "text": "The updated notes place filming in winter, roughly January–March, and mention completion in February. Exact production dates still need clarification."
+      },
+      "ko": {
+        "title": "겨울 촬영 기록",
+        "text": "업데이트된 표에는 겨울 촬영, 약 1~3월의 촬영 기간과 2월 촬영 완료가 적혀 있어요. 정확한 시작일과 종료일은 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.02.05",
+      "title": "开拍与时宇生日",
+      "text": "《检察官》开拍，也是朴时宇生日。（原记录待补资料）",
+      "en": {
+        "title": "Filming begins, on parksiwoo’s birthday",
+        "text": "Filming for the drama began on parksiwoo’s birthday. Supporting material is still needed."
+      },
+      "ko": {
+        "title": "촬영 시작, 그리고 시우의 생일",
+        "text": "드라마 촬영이 시작된 날이자 박시우의 생일이에요. 관련 자료는 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.04.10",
+      "title": "三行诗与互写简历",
+      "text": "格子衬衫造型的三行诗与互写简历物料，提到“周末跟我去约会吧”；时宇画的允植头像上有小皇冠。同日录制的判断来自发型与造型对照，尚未确认。",
+      "en": {
+        "title": "Acrostic poems and profiles",
+        "text": "Acrostic poems and profiles in checked shirts, including a weekend-date line and a little crown in parksiwoo’s drawing of kimyoonsik. A shared recording date is inferred from styling, not confirmed."
+      },
+      "ko": {
+        "title": "삼행시와 서로 써 준 프로필",
+        "text": "체크 셔츠 차림의 삼행시와 프로필 콘텐츠예요. 주말 데이트를 언급하고, 시우가 그린 윤식의 얼굴에는 작은 왕관도 있어요. 같은 날 촬영했다는 해석은 스타일링에 따른 추정이에요."
+      }
+    },
+    {
+      "date": "2026.04.18",
+      "title": "IG 造型照与点赞",
+      "text": "时宇在 IG 发布 4 月 10 日的造型照，配乐《我们的爱情就此启程》，允植点赞。",
+      "en": {
+        "title": "IG photos and a like",
+        "text": "parksiwoo posted the April 10 styling photos on IG with the song noted in the source as “Our love begins here”; kimyoonsik liked the post."
+      },
+      "ko": {
+        "title": "IG 사진과 좋아요",
+        "text": "시우가 4월 10일 스타일링 사진을 IG에 올렸고 윤식이 좋아요를 눌렀어요. 배경음악은 원자료의 중국어 표기를 따라 기록했어요."
+      }
+    },
+    {
+      "date": "2026.04.30",
+      "title": "IG 歌曲分享",
+      "text": "时宇在 IG 分享歌曲，允植点赞；更新表将歌曲主题解读为异地恋相关。",
+      "en": {
+        "title": "IG song share",
+        "text": "parksiwoo shared a song on IG and kimyoonsik liked it. The source interprets its theme as long-distance love."
+      },
+      "ko": {
+        "title": "IG 음악 공유",
+        "text": "시우가 IG에 음악을 공유하고 윤식이 좋아요를 눌렀어요. 장거리 연애와 관련된 곡이라는 해석은 원자료의 의견이에요."
+      }
+    },
+    {
+      "date": "2026.05.14",
+      "title": "IG 音乐与点赞",
+      "text": "时宇在 IG 分享歌曲，允植点赞；更新表将主题概括为“坠入爱情的失控感”。",
+      "en": {
+        "title": "Music and a like",
+        "text": "parksiwoo shared music on IG and kimyoonsik liked it. The source describes the theme as the loss of control when falling in love."
+      },
+      "ko": {
+        "title": "음악과 좋아요",
+        "text": "시우가 IG에 음악을 공유하고 윤식이 좋아요를 눌렀어요. 사랑에 빠질 때의 감정이라는 설명은 원자료의 해석이에요."
+      }
+    },
+    {
+      "date": "2026.05.18",
+      "title": "允植生日",
+      "text": "金允植生日；时宇的 IG 留下“选一选吧”相关内容。",
+      "en": {
+        "title": "kimyoonsik’s birthday",
+        "text": "kimyoonsik’s birthday, alongside an IG post from parksiwoo described as “choose one” in the notes."
+      },
+      "ko": {
+        "title": "윤식의 생일",
+        "text": "김윤식의 생일이에요. 시우의 IG에는 원자료에서 ‘골라 봐’로 정리한 내용도 남아 있어요."
+      }
+    },
+    {
+      "date": "2026.05.19",
+      "title": "生日蛋糕",
+      "text": "允植发布生日蛋糕照片，更新表记录了照片上的小老鼠 emoji 和小皇冠。",
+      "en": {
+        "title": "Birthday cake",
+        "text": "kimyoonsik shared birthday-cake photos. The updated notes point out a mouse emoji and a little crown."
+      },
+      "ko": {
+        "title": "생일 케이크",
+        "text": "윤식이 생일 케이크 사진을 올렸어요. 업데이트된 표에는 쥐 이모지와 작은 왕관도 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.05.20",
+      "title": "1—4 集 reaction",
+      "text": "1—4 集 reaction。（日期据妆造推测，待补资料）",
+      "en": {
+        "title": "Episodes 1–4 reaction",
+        "text": "A reaction to episodes 1–4. The date was inferred from styling and needs confirmation."
+      },
+      "ko": {
+        "title": "1~4화 리액션",
+        "text": "1~4화 리액션 기록이에요. 스타일링을 바탕으로 추정한 날짜라 확인이 필요해요."
+      }
+    },
+    {
+      "date": "2026.05.21",
+      "title": "INUFF 官宣成立",
+      "text": "2026 年 5 月 21 日，INUFF COMPANY 官宣成立。",
+      "en": {
+        "title": "INUFF officially announced",
+        "text": "The establishment of INUFF COMPANY was officially announced on May 21, 2026."
+      },
+      "ko": {
+        "title": "INUFF 설립 공식 발표",
+        "text": "2026년 5월 21일, INUFF COMPANY 설립이 공식 발표됐어요."
+      },
+      "originalScreenshotDate": "2026.05.23"
+    },
+    {
+      "date": "2026.05.25",
+      "title": "允植徒步露营",
+      "text": "允植和朋友徒步露营，并在泡泡更新。表中另记“5 月 26 日前已搬新家”，具体搬家日期未知，不单独指定日期。",
+      "en": {
+        "title": "Hiking and camping",
+        "text": "kimyoonsik went hiking and camping with friends and posted on bubble. The notes also say he moved before May 26; no exact moving date is assigned."
+      },
+      "ko": {
+        "title": "친구들과 하이킹과 캠핑",
+        "text": "윤식이 친구들과 하이킹과 캠핑을 하고 버블에 소식을 전했어요. 표에는 5월 26일 이전에 이사했다는 내용도 있지만 정확한 날짜는 아직 알 수 없어요."
+      }
+    },
+    {
+      "date": "2026.06.11",
+      "title": "露营 vlog",
+      "text": "允植的露营 vlog；朋友也在 IG 分享相关内容，时宇点赞。",
+      "en": {
+        "title": "Camping vlog",
+        "text": "kimyoonsik’s camping vlog; a friend also shared related material on IG, which parksiwoo liked."
+      },
+      "ko": {
+        "title": "캠핑 브이로그",
+        "text": "윤식의 캠핑 브이로그 기록이에요. 친구가 IG에 올린 관련 게시물에는 시우가 좋아요를 눌렀어요."
+      }
+    },
+    {
+      "date": "2026.06.25",
+      "title": "开播前的点赞互动",
+      "text": "《检察官》开播前一天，两人再次出现点赞互动；更新表记载此前一次为 5 月 14 日。",
+      "en": {
+        "title": "Likes before the premiere",
+        "text": "The updated notes record another like interaction the day before the drama premiered, following one on May 14."
+      },
+      "ko": {
+        "title": "첫 방송 전날의 좋아요",
+        "text": "드라마 첫 방송 전날 다시 좋아요를 주고받은 기록이에요. 업데이트된 표에는 이전 기록이 5월 14일로 적혀 있어요."
+      }
+    },
+    {
+      "date": "2026.06.26",
+      "title": "《检察官》开播",
+      "text": "《检察官》1—2 集开播。",
+      "en": {
+        "title": "Drama premiere",
+        "text": "Episodes 1–2 of the drama premiered."
+      },
+      "ko": {
+        "title": "드라마 첫 공개",
+        "text": "드라마 1~2화가 공개됐어요."
+      }
+    },
+    {
+      "date": "2026.06.29",
+      "title": "IG 酒馆照片",
+      "text": "IG 酒馆环抱照、牵手照及“怎么醉成这样”的相关记录。（待补资料）",
+      "en": {
+        "title": "Tavern photos on IG",
+        "text": "Tavern photos and the comment about being drunk were noted. Supporting material is still needed."
+      },
+      "ko": {
+        "title": "IG 술집 사진",
+        "text": "술집에서의 포옹·손잡은 사진과 취했다는 말이 기록되어 있어요. 관련 자료는 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.07.01",
+      "title": "《检察官》3—4 集",
+      "text": "《检察官》3—4 集开播。",
+      "en": {
+        "title": "Episodes 3–4",
+        "text": "Episodes 3–4 were released."
+      },
+      "ko": {
+        "title": "3~4화 공개",
+        "text": "드라마 3~4화가 공개됐어요."
+      }
+    },
+    {
+      "date": "2026.07.02",
+      "title": "IG 邀请看剧",
+      "text": "允植发 IG story，邀请时宇到家里看 3—4 集，照片中出现 iittala 春色系列杯子。",
+      "en": {
+        "title": "An invitation to watch together",
+        "text": "kimyoonsik invited parksiwoo home to watch episodes 3–4 in an IG story featuring iittala spring-colour cups."
+      },
+      "ko": {
+        "title": "함께 보자는 초대",
+        "text": "윤식이 IG 스토리로 시우를 집에 초대해 3~4화를 함께 보자고 했어요. 사진에는 iittala 봄 색상 시리즈 컵이 보여요."
+      }
+    },
+    {
+      "date": "2026.07.04",
+      "title": "INUFF 双人直播",
+      "text": "INUFF 双人直播，允植穿粉色衣服。",
+      "en": {
+        "title": "INUFF livestream together",
+        "text": "They appeared in an INUFF livestream; kimyoonsik wore pink."
+      },
+      "ko": {
+        "title": "INUFF 둘이 함께한 라이브",
+        "text": "INUFF 라이브에 두 사람이 함께했고, 김윤식은 분홍색 옷을 입었어요."
+      }
+    },
+    {
+      "date": "2026.07.08",
+      "title": "5—6 集与居家看剧邀请",
+      "text": "《检察官》5—6 集首播；允植在 IG story 邀请时宇到家一起看剧。更新表将鹿与刺猬图案杯子作了配对观察，不视为关系确认。",
+      "en": {
+        "title": "Episodes 5–6 and a watch invitation",
+        "text": "Episodes 5–6 premiered, with an IG story inviting parksiwoo home to watch. The source’s pairing of deer and hedgehog cups is an observation, not confirmation of a relationship."
+      },
+      "ko": {
+        "title": "5~6화와 함께 보자는 초대",
+        "text": "5~6화가 첫 공개되고, 윤식이 IG 스토리로 시우를 집에 초대했어요. 사슴과 고슴도치 컵을 짝으로 보는 내용은 원자료의 관찰이며 관계를 확인하는 근거로 단정하지 않아요."
+      }
+    },
+    {
+      "date": "2026.07.10",
+      "title": "泡泡开通与直播电话",
+      "text": "时宇开通泡泡，单人直播时打电话；记录中允植说“想你了”，并聊到露营、一起去桂林旅行。是否为 loading 拍摄日仍为推测，捐款记录保留待补。",
+      "en": {
+        "title": "bubble and a livestream call",
+        "text": "parksiwoo opened bubble and made a call during a solo livestream. Notes mention “I miss you”, camping and a Guilin trip. The loading shoot date and donation details remain unconfirmed."
+      },
+      "ko": {
+        "title": "버블 시작과 라이브 통화",
+        "text": "시우가 버블을 시작하고 개인 라이브에서 전화했어요. 기록에는 ‘보고 싶다’는 말과 캠핑, 구이린 여행 이야기가 있어요. loading 촬영일 추정과 기부 관련 내용은 추가 자료가 필요해요."
+      }
+    },
+    {
+      "date": "2026.07.11",
+      "title": "火锅聚餐与家人时间",
+      "text": "时宇和职员吃火锅，允植陪父母；晚间泡泡更新中有夸奖“检察官”的记录。",
+      "en": {
+        "title": "Hotpot and family time",
+        "text": "parksiwoo had hotpot with staff while kimyoonsik spent time with his parents. Evening bubble notes include praise for the prosecutor."
+      },
+      "ko": {
+        "title": "훠궈 모임과 가족 시간",
+        "text": "시우는 직원들과 훠궈를 먹고 윤식은 부모님과 시간을 보냈어요. 저녁 버블에는 검사 캐릭터를 칭찬한 기록도 있어요."
+      }
+    },
+    {
+      "date": "2026.07.12",
+      "title": "两人一猫的居家直播",
+      "text": "两人和三植一起直播，聊到“三植妈妈”、三植喜欢的味道；时宇用猫零食逗允植，也再次提到露营。",
+      "en": {
+        "title": "Two people, one cat",
+        "text": "A home livestream with Sam-sik: playful family nicknames, the cat’s favourite scent, cat treats and more camping talk."
+      },
+      "ko": {
+        "title": "두 사람과 고양이의 라이브",
+        "text": "삼식이와 함께한 집 라이브예요. ‘삼식이 엄마’라는 별명과 삼식이가 좋아하는 향, 고양이 간식 장난, 캠핑 이야기가 나왔어요."
+      }
+    },
+    {
+      "date": "2026.07.13",
+      "title": "IG 评论互动",
+      "text": "IG 评论：“三植是女儿”。",
+      "en": {
+        "title": "An IG comment",
+        "text": "The source records an IG comment: “삼식 is the daughter.”"
+      },
+      "ko": {
+        "title": "IG 댓글",
+        "text": "원자료에는 삼식이 딸이라는 IG 댓글이 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.07.14",
+      "title": "势界拍摄与 reaction",
+      "text": "势界拍摄日：夸奖、抱上桌、打领带、背后抱及咖啡话题等片段；另有 5—6 集 reaction。（待补资料，reaction 日期据 YouTube 时间补记）",
+      "en": {
+        "title": "Shoot and reaction",
+        "text": "A shoot with playful interactions, plus an episodes 5–6 reaction. Source material is incomplete; the reaction date uses the YouTube timestamp."
+      },
+      "ko": {
+        "title": "촬영과 리액션",
+        "text": "여러 장난스러운 장면이 담긴 촬영과 5~6화 리액션 기록이에요. 자료 보완이 필요하며 리액션 날짜는 유튜브 시간을 기준으로 적었어요."
+      }
+    },
+    {
+      "date": "2026.07.15",
+      "title": "双人问答、拍摄与 7—8 集",
+      "text": "双人澳门见面会及越南爱奇艺问候等内容拍摄、爱情问答物料和 7—8 集首播；晚间还有时宇个人采访。原表关于“确认关系”的判断属于作者推测。",
+      "en": {
+        "title": "Joint content and episodes 7–8",
+        "text": "Joint fan-meeting and greeting content, relationship Q&A material, episodes 7–8 and a solo interview. The source author’s relationship-status interpretation is not treated as fact."
+      },
+      "ko": {
+        "title": "둘이 함께한 콘텐츠와 7~8화",
+        "text": "팬미팅과 인사 영상 등 촬영 기록, 연애 문답 콘텐츠와 7~8화 첫 공개, 시우의 개인 인터뷰가 있어요. 관계에 대한 원자료 작성자의 판단은 추측으로 구분해요."
+      }
+    },
+    {
+      "date": "2026.07.16",
+      "title": "露营照片与问候视频",
+      "text": "允植和圈外朋友出游，并分享露营拍摄花絮视频；原记录还提到手势 emoji 与“wave”梗，以及双人越南爱奇艺问候视频。同日关联仅作原表整理。",
+      "en": {
+        "title": "Camping clips and a greeting video",
+        "text": "kimyoonsik shared camping behind-the-scenes clips from an outing with friends. The source also lists hand-gesture emojis, a “wave” reference and a joint iQIYI Vietnam greeting video."
+      },
+      "ko": {
+        "title": "캠핑 영상과 인사 영상",
+        "text": "윤식이 친구들과의 나들이 중 캠핑 비하인드 영상을 공유했어요. 원자료에는 손짓 이모지와 ‘wave’ 언급, 베트남 iQIYI 인사 영상도 같은 날 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.07.17",
+      "title": "个人拍摄与剧组聚餐",
+      "text": "允植个人拍摄、绿色格子自拍；晚间剧组聚餐，双方分享食物和合照相关内容，后续有四人居家直播与雨夜撑伞的记录。",
+      "en": {
+        "title": "Filming and a cast dinner",
+        "text": "kimyoonsik’s solo shoot and green checked-shirt selfie, followed by a cast dinner and food/photo updates. The archive also includes a four-person home livestream and rainy-night umbrella notes."
+      },
+      "ko": {
+        "title": "개인 촬영과 팀 식사",
+        "text": "윤식의 개인 촬영과 초록 체크 셔츠 셀카, 저녁 팀 식사와 음식·사진 기록이 있어요. 네 사람의 집 라이브와 비 오는 밤 우산 이야기도 함께 정리했어요."
+      }
+    },
+    {
+      "date": "2026.07.18",
+      "title": "粉衬衫直播",
+      "text": "时宇看李柱延 FM 后的粉衬衫直播，聊往昔和未来。（待补资料）",
+      "en": {
+        "title": "Pink-shirt livestream",
+        "text": "A livestream after a fan meeting, reflecting on the past and future. Supporting material is still needed."
+      },
+      "ko": {
+        "title": "분홍 셔츠 라이브",
+        "text": "팬미팅을 본 뒤 분홍 셔츠 차림으로 과거와 미래를 이야기한 라이브 기록이에요. 자료 보완이 필요해요."
+      }
+    },
+    {
+      "date": "2026.07.19",
+      "title": "双人拍摄与三行情诗",
+      "text": "双人拍摄一整天，包含 snackpaper 的战损、清新等造型；另有三行情诗物料和胡萝卜相关视频，聊天再次提到露营。",
+      "en": {
+        "title": "Joint filming and three-line poems",
+        "text": "A full day of joint filming, including snackpaper styling, three-line-poem content and a carrot-related video, with more camping talk."
+      },
+      "ko": {
+        "title": "둘이 함께한 촬영과 삼행시",
+        "text": "snackpaper 스타일링을 포함해 하루 동안 함께 촬영한 기록이에요. 삼행시 콘텐츠와 당근 관련 영상, 캠핑 이야기도 있어요."
+      }
+    },
+    {
+      "date": "2026.07.20",
+      "title": "fromm 群聊与日常",
+      "text": "fromm 群聊开通；时宇发三行诗“选择的男人就是你”。另记允植牙科、按摩、皮肤管理及咏鸡。（部分资料待补）",
+      "en": {
+        "title": "fromm group chat opens",
+        "text": "The group chat opened, with an acrostic poem. The notes also list kimyoonsik’s daily activities; some material is still needed."
+      },
+      "ko": {
+        "title": "fromm 단체 채팅 시작",
+        "text": "단체 채팅과 삼행시 기록이 있어요. 김윤식의 치과·마사지·피부 관리 등 일상 기록도 있으며 일부 자료 보완이 필요해요."
+      }
+    },
+    {
+      "date": "2026.07.21",
+      "title": "100 杯西瓜汁约定",
+      "text": "允植全天拍摄；时宇把两人的拼豆放在办公桌上。聊天提到炸鸡和 100 杯西瓜汁约定，7—8 集 reaction 也在这天播出。播出日与录制日分开记录。",
+      "en": {
+        "title": "A promise of 100 watermelon juices",
+        "text": "kimyoonsik filmed while parksiwoo displayed their bead art on his desk. Chat mentioned chicken and 100 watermelon juices. Episodes 7–8 reaction was released; its recording date is separate."
+      },
+      "ko": {
+        "title": "수박주스 100잔 약속",
+        "text": "윤식은 촬영하고 시우는 책상에 두 사람의 비즈 작품을 놓았어요. 치킨과 수박주스 100잔 약속이 나왔고 7~8화 리액션도 공개됐어요. 공개일과 촬영일은 구분해 기록해요."
+      }
+    },
+    {
+      "date": "2026.07.22",
+      "title": "费加罗拍摄与周年直播",
+      "text": "双人费加罗拍摄；更新表补记 8 月 4 日发售时由导演信息对应到 7 月 22 日。当天还有西瓜汁、刷牙素颜工作照，以及允植泡泡一周年个人直播。",
+      "en": {
+        "title": "Figaro shoot and an anniversary live",
+        "text": "A joint Figaro shoot, dated July 22 in the updated notes using director information accompanying the August 4 release. Also noted: watermelon juice, a work photo and kimyoonsik’s bubble anniversary live."
+      },
+      "ko": {
+        "title": "피가로 촬영과 기념 라이브",
+        "text": "피가로 화보 촬영일은 업데이트된 표에서 8월 4일 공개 당시의 감독 정보를 바탕으로 7월 22일로 정리했어요. 수박주스, 업무 중 사진과 윤식의 버블 1주년 라이브도 있었어요."
+      }
+    },
+    {
+      "date": "2026.07.23",
+      "title": "一起看大结局",
+      "text": "剧组聚餐看大结局，1—10 集结束。（待补资料）",
+      "en": {
+        "title": "Watching the finale",
+        "text": "A cast dinner to watch the finale, completing episodes 1–10. Material is still needed."
+      },
+      "ko": {
+        "title": "함께 본 마지막 회",
+        "text": "회식하며 마지막 회를 함께 본 기록이에요. 1~10화가 마무리됐으며 자료 보완이 필요해요."
+      }
+    },
+    {
+      "date": "2026.07.24",
+      "title": "fromm 守护与打卡",
+      "text": "fromm“允植由时宇守护”；打卡大屏，以及 kkt“狗狗检察官”相关记录。（部分资料待补）",
+      "en": {
+        "title": "fromm and display visit",
+        "text": "A protective message on fromm, a display visit and a KakaoTalk note. Some material is still needed."
+      },
+      "ko": {
+        "title": "fromm과 대형 화면 인증",
+        "text": "fromm의 지켜주겠다는 말, 대형 화면 인증과 카카오톡 관련 기록이에요. 일부 자료는 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.07.25",
+      "title": "时宇上海工作",
+      "text": "时宇上海工作及收信。",
+      "en": {
+        "title": "Work in Shanghai",
+        "text": "parksiwoo worked in Shanghai and received letters."
+      },
+      "ko": {
+        "title": "시우의 상하이 일정",
+        "text": "박시우의 상하이 업무 일정과 편지를 받은 기록이에요."
+      }
+    },
+    {
+      "date": "2026.07.26",
+      "title": "群聊照片",
+      "text": "fromm 群聊发布 snackpaper“战损”照片及“袋鼠抱”相关内容。",
+      "en": {
+        "title": "Photos in the group chat",
+        "text": "snackpaper photos and a playful hug appeared in the fromm group chat."
+      },
+      "ko": {
+        "title": "단체 채팅 사진",
+        "text": "fromm 단체 채팅에 snackpaper 사진과 장난스러운 포옹 관련 내용이 올라왔어요."
+      }
+    },
+    {
+      "date": "2026.07.27",
+      "title": "迪士尼烟花与直播",
+      "text": "时宇在迪士尼直播烟花，提到“小兔子在干嘛／在想你”；允植直播，原记录含“灰色赋”“快回韩国吧”。（部分资料待补）",
+      "en": {
+        "title": "Fireworks and livestreams",
+        "text": "Disney fireworks and separate livestreams, with affectionate remarks recorded in the notes. Some material is still needed."
+      },
+      "ko": {
+        "title": "디즈니 불꽃놀이와 라이브",
+        "text": "디즈니 불꽃놀이와 각자의 라이브 기록이에요. 원자료에 다정한 말들이 정리되어 있으며 일부 자료 보완이 필요해요."
+      }
+    },
+    {
+      "date": "2026.07.28",
+      "title": "通宵拆信与 reaction",
+      "text": "时宇通宵拆信、逛外滩，cue 允植健身；另有 9—10 集 reaction。（reaction 日期据 YouTube 时间补记）",
+      "en": {
+        "title": "Letters, the Bund and reaction",
+        "text": "Opening letters, visiting the Bund and mentioning kimyoonsik’s workouts; also an episodes 9–10 reaction dated by YouTube."
+      },
+      "ko": {
+        "title": "편지, 와이탄과 리액션",
+        "text": "밤새 편지를 읽고 와이탄을 둘러보며 김윤식의 운동을 언급한 기록이에요. 9~10화 리액션 날짜는 유튜브 기준이에요."
+      }
+    },
+    {
+      "date": "2026.07.29",
+      "title": "返韩与送礼物约定",
+      "text": "时宇回韩国并打卡大屏；允植有拍摄及大屏打卡记录。晚间时宇提到见面送礼物，跨午夜的实际送礼与开箱放在 7 月 30 日。",
+      "en": {
+        "title": "Return to Korea and gift plans",
+        "text": "parksiwoo returned to Korea and visited a display; kimyoonsik also had filming and display updates. Evening gift plans lead into the after-midnight unboxing filed under July 30."
+      },
+      "ko": {
+        "title": "귀국과 선물 약속",
+        "text": "시우가 귀국해 대형 스크린을 방문하고 윤식도 촬영과 스크린 방문 소식을 전했어요. 밤에 이야기한 선물 전달과 자정 이후 언박싱은 7월 30일에 정리했어요."
+      }
+    },
+    {
+      "date": "2026.07.30",
+      "title": "凌晨送礼物与开箱",
+      "text": "时宇凌晨到允植家送迪士尼礼物，随后开箱；两人当天也有日常更新。旧表“留宿双人约会”的说法属于推测，不作为已确认行程。",
+      "en": {
+        "title": "A late-night gift and unboxing",
+        "text": "parksiwoo brought Disney gifts to kimyoonsik’s home for an unboxing. Both posted daily updates. The older “overnight date” interpretation remains speculation."
+      },
+      "ko": {
+        "title": "새벽 선물 전달과 언박싱",
+        "text": "시우가 새벽에 윤식의 집으로 디즈니 선물을 전하고 언박싱했어요. 두 사람의 일상 업데이트도 있었어요. 이전 표의 ‘숙박 데이트’라는 해석은 확인된 일정으로 보지 않아요."
+      }
+    },
+    {
+      "date": "2026.07.31",
+      "title": "双人爱情问答",
+      "text": "双人爱情问答游戏，提到“下辈子再见面”。",
+      "en": {
+        "title": "A love-themed Q&A",
+        "text": "A joint Q&A included a remark about meeting again in another life."
+      },
+      "ko": {
+        "title": "둘이 함께한 연애 문답",
+        "text": "연애 문답 게임에서 다음 생에 다시 만나자는 말이 나온 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.01",
+      "title": "fromm 互动",
+      "text": "fromm：“做哥的搞笑艺人，是咪的观众”。",
+      "en": {
+        "title": "A fromm exchange",
+        "text": "A playful exchange about being a comedian and an audience member."
+      },
+      "ko": {
+        "title": "fromm 대화",
+        "text": "서로의 웃음과 관객에 관한 장난스러운 대화 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.02",
+      "title": "群聊健身话题与晚安",
+      "text": "群聊中允植提醒时宇早睡；晚间两人聊到健身。时宇分享红领黑衣照片及游轮自助相关内容，原表注明并非当天自拍。",
+      "en": {
+        "title": "Workout chat and goodnight",
+        "text": "A group-chat reminder to sleep early and evening workout talk. parksiwoo shared red-and-black outfit photos and cruise-buffet content; the source says the photos were not taken that day."
+      },
+      "ko": {
+        "title": "운동 이야기와 밤 인사",
+        "text": "단체 채팅에서 윤식이 시우에게 일찍 자라고 하고, 저녁에는 운동 이야기가 나왔어요. 시우의 빨간 포인트 의상 사진과 크루즈 뷔페 이야기도 있어요. 사진은 당일 셀카가 아니라고 적혀 있어요."
+      }
+    },
+    {
+      "date": "2026.08.03",
+      "title": "健身与读粉丝信",
+      "text": "允植早间健身，下午到公司看粉丝信，晚间还有健身相关更新。更新表记载两人当天无拍摄；关于信件转交及同行的判断保留为待确认观察。",
+      "en": {
+        "title": "Workouts and fan letters",
+        "text": "kimyoonsik worked out and read fan letters at the company. The updated notes list no filming that day; interpretations about forwarded letters or shared plans remain unconfirmed."
+      },
+      "ko": {
+        "title": "운동과 팬레터 읽기",
+        "text": "윤식이 운동하고 회사에서 팬레터를 읽었어요. 표에는 두 사람 모두 촬영이 없었다고 적혀 있어요. 편지 전달이나 동행에 대한 해석은 아직 확인되지 않았어요."
+      }
+    },
+    {
+      "date": "2026.08.04",
+      "title": "费加罗公开与拍摄留言",
+      "text": "费加罗物料公开，时宇分享拍摄花絮；IG 留下拍摄纸条及“笨蛋，餐厅定好了吗”等相关内容。",
+      "en": {
+        "title": "Figaro release and messages",
+        "text": "Figaro material was released and parksiwoo shared behind-the-scenes content, alongside IG notes about a restaurant booking."
+      },
+      "ko": {
+        "title": "피가로 공개와 메시지",
+        "text": "피가로 콘텐츠가 공개되고 시우가 비하인드를 공유했어요. IG에는 촬영 메모와 식당 예약에 관한 내용도 남아 있어요."
+      }
+    },
+    {
+      "date": "2026.08.05",
+      "title": "fromm 买衣服",
+      "text": "fromm 提到给允植买衣服。",
+      "en": {
+        "title": "Buying clothes",
+        "text": "A fromm mention of buying clothes for kimyoonsik."
+      },
+      "ko": {
+        "title": "옷을 사준 이야기",
+        "text": "fromm에서 김윤식에게 옷을 사준 이야기가 나온 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.06",
+      "title": "双人拍摄与蓝衬衫",
+      "text": "两人有拍摄行程；时宇分享双人比耶照片。更新表将时宇送允植蓝色衬衫的记录放在这一天，后续直播也提及这件衣服。",
+      "en": {
+        "title": "Joint filming and a blue shirt",
+        "text": "Both had filming schedules and parksiwoo shared a joint peace-sign photo. The updated notes place the blue-shirt gift here; it was discussed again in a later livestream."
+      },
+      "ko": {
+        "title": "함께한 촬영과 파란 셔츠",
+        "text": "두 사람의 촬영 일정과 시우가 공유한 브이 사진이 있어요. 업데이트된 표에는 파란 셔츠 선물도 이날 기록되어 있고, 이후 라이브에서도 이 옷을 언급했어요."
+      }
+    },
+    {
+      "date": "2026.08.07",
+      "title": "允植临时直播",
+      "text": "fromm 临时单人直播，原记录提到“植时守护”。",
+      "en": {
+        "title": "An impromptu livestream",
+        "text": "An impromptu solo fromm livestream by kimyoonsik, with a supportive exchange in the source note."
+      },
+      "ko": {
+        "title": "윤식의 깜짝 라이브",
+        "text": "김윤식의 깜짝 fromm 라이브와 응원하는 말이 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.08.08",
+      "title": "首尔飞澳门",
+      "text": "从首尔飞往澳门。",
+      "en": {
+        "title": "Seoul to Macau",
+        "text": "A flight from Seoul to Macau."
+      },
+      "ko": {
+        "title": "서울에서 마카오로",
+        "text": "서울에서 마카오로 이동한 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.09",
+      "title": "澳门见面会",
+      "text": "时宇直播中的“爸爸妈妈女儿”称呼；澳门见面会；商务酒局。",
+      "en": {
+        "title": "Macau fan meeting",
+        "text": "A Macau fan meeting, a business gathering and playful family-role nicknames in parksiwoo’s livestream."
+      },
+      "ko": {
+        "title": "마카오 팬미팅",
+        "text": "마카오 팬미팅과 비즈니스 모임, 박시우 라이브의 장난스러운 가족 호칭 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.10",
+      "title": "澳门返首尔",
+      "text": "澳门飞首尔，允植穿蓝衬衫；另有允植皮肤过敏就医的记录。",
+      "en": {
+        "title": "Back to Seoul",
+        "text": "A return flight from Macau, kimyoonsik’s blue shirt, and a source note about treatment for a skin allergy."
+      },
+      "ko": {
+        "title": "마카오에서 서울로",
+        "text": "서울로 돌아오는 일정과 김윤식의 파란 셔츠, 피부 알레르기로 병원에 갔다는 기록이 있어요."
+      }
+    },
+    {
+      "date": "2026.08.11",
+      "title": "拍摄与晚餐记录",
+      "text": "时宇分享白天的自拍与天空；允植从拍摄到晚餐有日常更新，更新表还记录了紫菜包饭、炸鸡及拉面。",
+      "en": {
+        "title": "Filming and dinner notes",
+        "text": "parksiwoo shared a selfie and sky photos, while kimyoonsik posted filming and dinner updates. The notes mention gimbap, chicken and ramyeon."
+      },
+      "ko": {
+        "title": "촬영과 저녁 기록",
+        "text": "시우가 셀카와 하늘 사진을 공유하고 윤식은 촬영과 저녁 소식을 전했어요. 표에는 김밥과 치킨, 라면도 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.08.12",
+      "title": "群聊恢复更新",
+      "text": "澳门行程后群聊再次更新。时宇有拍摄、吃西瓜和散步记录；允植也分享拍摄与晚间问候。两人散步时间接近仅为原表观察。",
+      "en": {
+        "title": "Group-chat updates resume",
+        "text": "The group chat updated again after Macau. Notes include filming, watermelon, walks and evening greetings. Similar walking times are only a source observation."
+      },
+      "ko": {
+        "title": "단체 채팅 업데이트 재개",
+        "text": "마카오 일정 이후 단체 채팅이 다시 업데이트됐어요. 촬영과 수박, 산책, 저녁 인사 기록이 있어요. 산책 시간이 비슷하다는 내용은 원자료의 관찰이에요."
+      }
+    },
+    {
+      "date": "2026.08.13",
+      "title": "拍摄与 fromm 夜聊",
+      "text": "拍摄行程、fromm 夜聊 balance game、“买西瓜的金允植”及黑背心自拍；允植发健身照。（部分资料待补）",
+      "en": {
+        "title": "Shoot, night chat and photos",
+        "text": "A shoot, a fromm balance game, watermelon talk, a black-tank-top selfie and workout photos. Some material is still needed."
+      },
+      "ko": {
+        "title": "촬영, 밤 대화와 사진",
+        "text": "촬영 일정, fromm 밸런스 게임, 수박 이야기와 셀카·운동 사진 기록이에요. 일부 자료 보완이 필요해요."
+      }
+    },
+    {
+      "date": "2026.08.14",
+      "title": "允植与朋友出游",
+      "text": "允植与朋友出游，穿蓝衬衫。",
+      "en": {
+        "title": "Out with friends",
+        "text": "kimyoonsik went out with friends in a blue shirt."
+      },
+      "ko": {
+        "title": "친구들과 나들이",
+        "text": "김윤식이 파란 셔츠를 입고 친구들과 외출한 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.15",
+      "title": "允植与朋友玩密室",
+      "text": "允植与朋友玩密室，穿蓝衬衫。",
+      "en": {
+        "title": "Escape room with friends",
+        "text": "kimyoonsik visited an escape room with friends, wearing a blue shirt."
+      },
+      "ko": {
+        "title": "친구들과 방 탈출",
+        "text": "김윤식이 파란 셔츠를 입고 친구들과 방 탈출을 한 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.16",
+      "title": "工作、返韩与运动",
+      "text": "时宇拍摄后返回韩国、到公司练舞，并分享玩偶；允植有日程、吃饭与健身更新。旧表的上海工作记录与本表返韩记录一并保留，不补造航班时间。",
+      "en": {
+        "title": "Work, return to Korea and exercise",
+        "text": "parksiwoo returned to Korea after filming, practised dance and shared a plush toy. kimyoonsik posted about schedules and exercise. No flight time is invented from the differing notes."
+      },
+      "ko": {
+        "title": "촬영과 귀국, 운동",
+        "text": "시우가 촬영 후 귀국해 회사에서 춤을 연습하고 인형을 공유했어요. 윤식은 일정과 운동 소식을 전했어요. 이전 표의 상하이 일정과 새 표의 귀국 기록을 함께 보존하되 항공편 시간은 임의로 정하지 않아요."
+      }
+    },
+    {
+      "date": "2026.08.17",
+      "title": "直播聊蓝衬衫",
+      "text": "IG 直播中，允植提到时宇买的 ami 蓝衬衫。",
+      "en": {
+        "title": "The blue shirt story",
+        "text": "In an IG livestream, kimyoonsik mentioned the ami blue shirt bought by parksiwoo."
+      },
+      "ko": {
+        "title": "파란 셔츠 이야기",
+        "text": "IG 라이브에서 김윤식이 박시우가 사준 ami 파란 셔츠를 언급했어요."
+      }
+    },
+    {
+      "date": "2026.08.18",
+      "title": "日常行程与唱歌",
+      "text": "时宇否认赴杭州的传言，并表示自己在韩国；允植分享日程、唱歌与自拍，提到 TWNS 编舞。传言不作为行程加入。",
+      "en": {
+        "title": "Schedules and singing",
+        "text": "parksiwoo denied the Hangzhou rumour and said he was in Korea. kimyoonsik shared schedule updates, singing and selfies, with a reference to TWNS choreography."
+      },
+      "ko": {
+        "title": "일정과 노래",
+        "text": "시우가 항저우 방문설을 부인하고 한국에 있다고 했어요. 윤식은 일정과 노래, 셀카를 공유하고 TWNS 안무를 언급했어요. 소문은 일정으로 추가하지 않아요."
+      }
+    },
+    {
+      "date": "2026.08.19",
+      "title": "微店直播",
+      "text": "时宇微店直播，原记录含“默默喜欢的类型”“大家聚集”。（待补资料）",
+      "en": {
+        "title": "Weidian livestream",
+        "text": "parksiwoo’s Weidian livestream, with remarks noted in the source. Supporting material is still needed."
+      },
+      "ko": {
+        "title": "웨이디엔 라이브",
+        "text": "박시우의 웨이디엔 라이브와 당시 대화 기록이에요. 관련 자료는 추후 보완할 예정이에요."
+      }
+    },
+    {
+      "date": "2026.08.20",
+      "title": "表演课与日常更新",
+      "text": "时宇提到表演课，并分享日常与玩偶；允植有工作行程和居家事务相关更新。",
+      "en": {
+        "title": "Acting class and daily updates",
+        "text": "parksiwoo mentioned acting class and shared daily updates and plush toys. kimyoonsik posted about work and things to do at home."
+      },
+      "ko": {
+        "title": "연기 수업과 일상",
+        "text": "시우가 연기 수업을 언급하고 일상과 인형 사진을 공유했어요. 윤식은 업무 일정과 집에서 할 일에 관한 소식을 전했어요."
+      }
+    },
+    {
+      "date": "2026.08.21",
+      "title": "见面会前的准备",
+      "text": "两人有行程与见面会准备记录，时宇试穿见面会服装并练舞；表中另有视频通话的观察，暂不当作已确认事件。",
+      "en": {
+        "title": "Fan-meeting preparations",
+        "text": "Schedules and fan-meeting preparations, including parksiwoo trying outfits and rehearsing. A suggested video call remains an unconfirmed source observation."
+      },
+      "ko": {
+        "title": "팬미팅 준비",
+        "text": "일정과 팬미팅 준비 기록이 있어요. 시우는 의상을 입어 보고 춤을 연습했어요. 영상통화 추정은 확인된 사건으로 단정하지 않아요."
+      }
+    },
+    {
+      "date": "2026.08.22",
+      "title": "首尔见面会",
+      "text": "首尔见面会，原记录为中午、晚上两场；西瓜汁约定剩 81 杯。",
+      "en": {
+        "title": "Seoul fan meetings",
+        "text": "Two sessions in Seoul; the watermelon-juice promise reportedly had 81 cups remaining."
+      },
+      "ko": {
+        "title": "서울 팬미팅",
+        "text": "낮과 저녁 두 차례 팬미팅 기록이에요. 원자료에는 수박주스 약속이 81잔 남았다고 적혀 있어요."
+      }
+    },
+    {
+      "date": "2026.08.23",
+      "title": "首尔见面会后的更新",
+      "text": "见面会后两人分享休息、饭后日常、行程与问候等内容；更新表还收录时宇唱歌的记录。",
+      "en": {
+        "title": "Updates after the Seoul fan meeting",
+        "text": "Rest, meals, schedules and greetings after the fan meeting, with a note about parksiwoo singing."
+      },
+      "ko": {
+        "title": "서울 팬미팅 이후의 소식",
+        "text": "팬미팅 이후 휴식과 식사, 일정과 인사를 공유했어요. 시우가 노래한 기록도 표에 담겨 있어요."
+      }
+    },
+    {
+      "date": "2026.08.24",
+      "title": "工作行程与感谢鲜花",
+      "text": "时宇有个人行程；允植拍摄美容仪相关内容，分享午餐、下班消息及收到鲜花的感想。",
+      "en": {
+        "title": "Work and thanks for flowers",
+        "text": "parksiwoo had a personal schedule; kimyoonsik filmed beauty-device content and shared lunch, wrap-up updates and thoughts on receiving flowers."
+      },
+      "ko": {
+        "title": "일정과 꽃에 대한 감사",
+        "text": "시우는 개인 일정이 있었고 윤식은 뷰티 기기 관련 촬영을 했어요. 점심과 퇴근 소식, 받은 꽃에 대한 마음도 전했어요."
+      }
+    },
+    {
+      "date": "2026.08.25",
+      "title": "活动与双人直播",
+      "text": "时宇穿黄衬衫参加护肤品见面会；双人直播聊到允植被猫踩醒、咖啡，以及天蓝色和紫色的对应。颜色与关系的延伸解读保留为粉丝观察。",
+      "en": {
+        "title": "An event and a joint live",
+        "text": "A skincare event and joint livestream featuring the cat waking kimyoonsik, coffee, and sky blue and purple. Further relationship interpretations remain fan observations."
+      },
+      "ko": {
+        "title": "행사와 둘이 함께한 라이브",
+        "text": "스킨케어 행사와 둘이 함께한 라이브가 있었어요. 고양이에게 잠이 깬 이야기와 커피, 하늘색과 보라색을 언급했어요. 색상에 대한 관계 해석은 팬의 관찰로 구분해요."
+      }
+    },
+    {
+      "date": "2026.08.26",
+      "title": "fromm 称呼互动",
+      "text": "fromm 称呼互动，呼应咖啡上的名字。",
+      "en": {
+        "title": "Names on the coffee",
+        "text": "A fromm exchange of nicknames echoed the names on coffee."
+      },
+      "ko": {
+        "title": "커피에 적힌 이름",
+        "text": "fromm의 호칭이 커피에 적힌 이름과 이어지는 기록이에요."
+      }
+    },
+    {
+      "date": "2026.08.27",
+      "title": "fromm 头像与称呼",
+      "text": "时宇更换 fromm 头像、名字及合照；说起敬语，允植问“生气了吗”。",
+      "en": {
+        "title": "Profile changes and a question",
+        "text": "fromm profile changes and a conversation about polite speech, including “Are you upset?”"
+      },
+      "ko": {
+        "title": "프로필 변경과 호칭 이야기",
+        "text": "fromm 프로필 변경과 존댓말 이야기, 화났냐고 묻는 대화가 기록되어 있어요."
+      }
+    },
+    {
+      "date": "2026.08.28",
+      "title": "曼谷行程与晚餐",
+      "text": "两人前往曼谷；更新表记载晚间一起在海鲜店吃饭，后续有晚安更新。",
+      "en": {
+        "title": "Bangkok travel and dinner",
+        "text": "They travelled to Bangkok. The updated notes record dinner together at a seafood restaurant and later goodnight updates."
+      },
+      "ko": {
+        "title": "방콕 일정과 저녁",
+        "text": "두 사람이 방콕으로 향했어요. 업데이트된 표에는 저녁에 함께 해산물 식당에서 식사하고 밤 인사를 전한 기록이 있어요."
+      }
+    },
+    {
+      "date": "2026.08.29",
+      "title": "曼谷见面会与深夜直播",
+      "text": "曼谷见面会，含“要相爱一百年”和皮影戏相关记录；时宇深夜直播回顾 INUFF。允植随后赴上海，跨午夜后的上海活动放在 8 月 30 日。",
+      "en": {
+        "title": "Bangkok fan meeting and a late live",
+        "text": "The Bangkok fan meeting included the “love for a hundred years” line and shadow play. parksiwoo held a late INUFF recap live; kimyoonsik’s Shanghai activity after midnight is filed under August 30."
+      },
+      "ko": {
+        "title": "방콕 팬미팅과 심야 라이브",
+        "text": "방콕 팬미팅의 ‘백 년 동안 사랑하자’는 말과 그림자놀이 기록, 시우의 심야 INUFF 라이브가 있어요. 자정 이후 윤식의 상하이 활동은 8월 30일에 정리했어요."
+      }
+    },
+    {
+      "date": "2026.08.30",
+      "title": "上海一日店长与游泳更新",
+      "text": "允植在上海参加 MINISO 一日店长活动、录制红秀内容，晚间返韩；时宇更新工作会议、游泳及照片。游泳地点“疑似印尼”仍未确认。",
+      "en": {
+        "title": "Shanghai event and swimming updates",
+        "text": "kimyoonsik attended a MINISO guest-manager event and a magazine recording in Shanghai, returning to Korea that evening. parksiwoo shared meetings and swimming updates; Indonesia remains an unconfirmed location guess."
+      },
+      "ko": {
+        "title": "상하이 일일 점장과 수영 소식",
+        "text": "윤식이 상하이 MINISO 일일 점장 행사와 매거진 촬영에 참여하고 저녁에 귀국했어요. 시우는 회의와 수영 소식을 전했어요. 수영 장소가 인도네시아라는 추측은 아직 확인되지 않았어요."
+      }
+    },
+    {
+      "date": "2026.08.31",
+      "title": "群聊关闭与剧照回顾",
+      "text": "fromm 群聊关闭，并有剧中台词 callback；允植分享雨天、休息与剧照，时宇分享日常。更新表将部分图片拼成爱心的说法作为图片编排观察保留。",
+      "en": {
+        "title": "Group chat closes and drama memories",
+        "text": "The fromm group chat closed, with drama-line callbacks and daily updates. A heart-shaped photo arrangement is retained as an observation in the source."
+      },
+      "ko": {
+        "title": "단체 채팅 종료와 드라마 추억",
+        "text": "fromm 단체 채팅이 종료되고 드라마 대사를 다시 언급했어요. 윤식은 비 오는 날과 휴식, 드라마 사진을 공유했어요. 사진 배치가 하트처럼 보인다는 내용은 원자료의 관찰이에요."
+      }
+    },
+    {
+      "date": "2026.09.01",
+      "title": "已知双人合作留档",
+      "text": "截至原记录整理时：loading、费加罗、势界、工牌回家、施洛华眼镜、snackpaper，以及官周 1.0／2.0 等双人合作。品牌及项目名暂按原记录保留。",
+      "en": {
+        "title": "Joint projects archive",
+        "text": "An archive of joint projects listed in the notes: loading, Figaro, 势界, 工牌回家, 施洛华眼镜, snackpaper and official merchandise 1.0/2.0. Names are retained as supplied."
+      },
+      "ko": {
+        "title": "둘이 함께한 프로젝트 모음",
+        "text": "원자료에 정리된 loading, Figaro, 势界, 工牌回家, 施洛华眼镜, snackpaper와 공식 굿즈 1.0·2.0 등의 기록이에요. 명칭은 제공된 표기를 유지했어요."
+      }
+    }
+  ],
+  "latestSupplement": "./shared-timeline-2026-supplement.json"
+}

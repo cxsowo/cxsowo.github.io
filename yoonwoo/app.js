@@ -1,6 +1,32 @@
 (() => {
   'use strict';
   const config = window.TIMELINE_CONFIG;
+  // Keep a long shared history from stretching the short solo introduction.
+  const timelineUnits=config.before.length+config.after.length+4;
+  const timelineCrossingAt=config.after.length>20?Math.max(.1,config.before.length/timelineUnits):config.crossingAt;
+  const timelineCrossingDuration=config.after.length>20?4/timelineUnits:config.crossingDuration;
+  const locales = window.TIMELINE_LOCALES;
+  let language = 'zh';
+  try { const saved=localStorage.getItem('yoonwoo-language'); if(locales[saved])language=saved; } catch {}
+  const tr = key => locales[language][key] ?? locales.zh[key];
+  const eventContent = event => {
+    const translation=event.i18n?.[language] ?? window.TIMELINE_EVENT_TRANSLATIONS?.[event.id]?.[language];
+    return { title:translation?.title || event.title, text:translation?.text || event.text };
+  };
+  let openedEvent=null, galleryEvent=null, galleryIndex=0;
+  const personName = key => config.peopleI18n?.[language]?.[key] || config.people[key];
+  const dateText = value => value==='现在' ? ({zh:'现在',en:'Now',ko:'현재'})[language] : value;
+  const shortDate = value => {
+    if(/^\d{4}\.\d{2}\.\d{2}$/.test(value))return value.slice(5);
+    if(/^\d{4}\.\d{2}$/.test(value))return language==='en' ? ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][Number(value.slice(5))-1] : `${Number(value.slice(5))}${language==='ko'?'월':'月'}`;
+    return dateText(value);
+  };
+  function setDate(element,value){
+    element.textContent=dateText(value);
+    if(/^\d{4}(\.\d{2}){0,2}$/.test(value))element.dateTime=value.replaceAll('.', '-');
+    else element.removeAttribute('datetime');
+  }
+
   const $ = id => document.getElementById(id);
   const clamp = (v, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, v));
   const smooth = v => { const t = clamp(v); return t * t * (3 - 2 * t); };
@@ -45,7 +71,7 @@
   });
   if(!reducedMotion)sparkle();
   const cards = [];
-  const labelFor = event => event.person === 'both' ? `${config.people.a} + ${config.people.b} · 共同事件` : `${config.people[event.person]} · 个人事件`;
+  const labelFor = event => event.person === 'both' ? `${personName('a')} + ${personName('b')} · ${tr('shared')}` : `${personName(event.person)} · ${tr('single')}`;
   const artworkLabels = { mountain: 'Somewhere, a beginning', window: 'A window into time', moon: 'Under the same moon', union: 'Two lives, one moment' };
   function createEvent(event, phase) {
     const button = document.createElement('button');
@@ -54,9 +80,14 @@
     const art = document.createElement('div'); art.className = `art ${event.art}`; art.setAttribute('aria-hidden', 'true');
     const moon = document.createElement('i'); moon.className = 'moon'; if (event.art !== 'window' && event.art !== 'union') art.append(moon);
     const caption = document.createElement('span'); caption.className = 'art-caption'; caption.textContent = artworkLabels[event.art] || artworkLabels.moon; art.append(caption);
+    if(event.cover){
+      art.classList.add('has-photo');
+      const cover=document.createElement('img');cover.src=event.cover;cover.alt='';cover.decoding='async';
+      cover.style.objectPosition=event.coverPosition||'50% 50%';art.append(cover);
+    }
     const head = document.createElement('div'); head.className = 'event-head';
-    const date = document.createElement('time'); date.dateTime = event.date.replaceAll('.', '-'); date.textContent = event.date;
-    const owner = document.createElement('span'); owner.textContent = event.person === 'both' ? 'A + B' : config.people[event.person]; head.append(date, owner);
+    const date = document.createElement('time'); setDate(date,event.date);
+    const owner = document.createElement('span'); owner.textContent = event.person === 'both' ? 'A + B' : personName(event.person); head.append(date, owner);
     const title = document.createElement('h2'); title.textContent = event.title;
     const copy = document.createElement('p'); copy.textContent = event.text;
     const foot = document.createElement('div'); foot.className = 'card-footer';
@@ -64,9 +95,7 @@
     const arrow = document.createElement('b'); arrow.textContent = '↗'; foot.append(footLabel, arrow);
     button.append(art, head, title, copy, foot);
     button.addEventListener('click', () => {
-      $('detail-owner').textContent = labelFor(event); $('detail-date').textContent = event.date;
-      $('detail-date').dateTime = event.date.replaceAll('.', '-'); $('detail-title').textContent = event.title;
-      $('detail-copy').textContent = event.text; dialog.showModal();
+      openedEvent=event; updateDetail(event); dialog.showModal();
     });
     const node = document.createElement('div'); node.className = 'timeline-node'; node.dataset.person = event.person;
     const time = document.createElement('time'); time.textContent = event.date; node.append(time);
@@ -108,8 +137,8 @@
   }
   function hideTickPreview(marker) { tickPreview.hidden = true; marker.removeAttribute('aria-describedby'); }
   const eventTicks = cards.map((item, index) => {
-    const crossingStart = clamp(config.crossingAt, .1, .8);
-    const crossingEnd = Math.min(.95, crossingStart + config.crossingDuration);
+    const crossingStart = clamp(timelineCrossingAt, .1, .8);
+    const crossingEnd = Math.min(.95, crossingStart + timelineCrossingDuration);
     const position = item.phase === 'before'
       ? item.event.position / travelBefore * crossingStart
       : crossingEnd + item.event.position / travelAfter * (1 - crossingEnd);
@@ -126,11 +155,78 @@
     marker.addEventListener('click', () => { hideTickPreview(marker); scrollToProgress(position); });
     const dot = document.createElement('span'); dot.className = 'event-tick-dot';
     const date = document.createElement('time');
-    date.dateTime = item.event.date.replaceAll('.', '-');
-    date.textContent = item.event.date.slice(5);
+    setDate(date,item.event.date);date.textContent=shortDate(item.event.date);
     marker.append(dot, date); $('event-ticks').append(marker);
     return { marker, position };
   });
+  function updateDetail(event){
+    const content=eventContent(event);
+    $('detail-owner').textContent=labelFor(event);$('detail-date').textContent=event.date;
+    setDate($('detail-date'),event.date);
+    $('detail-title').textContent=content.title;$('detail-copy').textContent=content.text;
+    if(galleryEvent!==event){galleryEvent=event;galleryIndex=0;}
+    const gallery=$('detail-gallery');gallery.hidden=!event.images?.length;
+    $('gallery-thumbs').replaceChildren();
+    if(!gallery.hidden){
+      event.images.forEach((src,index)=>{
+        const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`${tr('photo')} ${index+1}`);
+        const image=document.createElement('img');image.src=src;image.alt='';image.loading='lazy';button.append(image);
+        button.addEventListener('click',()=>{galleryIndex=index;showGalleryPhoto();});$('gallery-thumbs').append(button);
+      });
+      $('gallery-prev').setAttribute('aria-label',tr('previousPhoto'));$('gallery-next').setAttribute('aria-label',tr('nextPhoto'));
+      gallery.setAttribute('aria-label',tr(event.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum'));showGalleryPhoto();
+    }
+
+  }
+  function showGalleryPhoto(){
+    if(!galleryEvent?.images?.length)return;
+    const images=galleryEvent.images;galleryIndex=(galleryIndex+images.length)%images.length;
+    $('gallery-image').src=images[galleryIndex];
+    $('gallery-image').alt=`${labelFor(galleryEvent)} · ${tr(galleryEvent.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum')} ${galleryIndex+1}`;
+    $('gallery-counter').textContent=`${galleryIndex+1} / ${images.length}`;
+    [...$('gallery-thumbs').children].forEach((button,index)=>button.setAttribute('aria-pressed',String(index===galleryIndex)));
+  }
+  $('gallery-prev').addEventListener('click',()=>{galleryIndex--;showGalleryPhoto();});
+  $('gallery-next').addEventListener('click',()=>{galleryIndex++;showGalleryPhoto();});
+  dialog.addEventListener('keydown',event=>{
+    if($('detail-gallery').hidden)return;
+    if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+      event.preventDefault();galleryIndex+=event.key==='ArrowLeft'?-1:1;showGalleryPhoto();
+    }
+  });
+  function setLanguage(next){
+    language=locales[next]?next:'zh';
+    try{localStorage.setItem('yoonwoo-language',language);}catch{}
+    document.documentElement.lang=language==='zh'?'zh-CN':language;
+    document.title=`${tr('pageTitle').split(' · ')[0]} · ${personName('a')} & ${personName('b')}`;
+    document.querySelector('.stage').setAttribute('aria-label',tr('timeline'));
+    cardsRoot.setAttribute('aria-label',tr('events'));
+    $('event-ticks').setAttribute('aria-label',tr('dates'));
+    $('current-time').setAttribute('aria-label',tr('current'));
+    $('language-switch').setAttribute('aria-label',tr('languages'));
+    document.querySelector('.journey-meter>span').textContent=tr('start');
+    $('about-site').textContent=tr('aboutButton');$('about-title').textContent=tr('aboutTitle');
+    $('about-copy').textContent=tr('aboutCopy');$('about-love').textContent=tr('aboutLove');
+    $('about-contact-label').textContent=tr('aboutContact');$('close-about').setAttribute('aria-label',tr('closeAbout'));
+    $('restart').textContent=tr('restart');$('close-dialog').setAttribute('aria-label',tr('close'));
+    document.querySelector('#crossing-label>span').textContent=tr('moment');
+    document.querySelector('#crossing-label>p').textContent=eventContent(config.after.find(event=>event.id==='first-meeting')||{title:'',text:tr('crossing')}).text;
+    for(const item of cards){
+      const content=eventContent(item.event),button=item.button;
+      button.querySelector('h2').textContent=content.title;button.querySelector('p').textContent=content.text;
+      setDate(button.querySelector('.event-head time'),item.event.date);
+      button.querySelector('.event-head>span').textContent=item.event.person==='both'?`${personName('a')} + ${personName('b')}`:personName(item.event.person);
+      button.querySelector('.card-footer>span').textContent=item.event.images?.length?`${item.event.images.length} ${tr('photos')} · ${tr('details')}`:tr('sample');
+      button.querySelector('.art-caption').textContent=tr('artwork')[item.event.art] || tr('artwork').moon;
+      button.setAttribute('aria-label',`${item.event.date}，${labelFor(item.event)}，${content.title}，${tr('details')}`);
+    }
+    eventTicks.forEach((tick,index)=>{tick.marker.setAttribute('aria-label',`${tr('jump')} ${dateText(cards[index].event.date)}，${eventContent(cards[index].event).title}`);tick.marker.querySelector('time').textContent=shortDate(cards[index].event.date);});
+    document.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===language)));
+    if(openedEvent&&dialog.open)updateDetail(openedEvent);
+    tickPreview.hidden=true;
+    schedule();
+  }
+  document.querySelectorAll('[data-language]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.language)));
   const meter=document.querySelector('.meter');
   const ruler=document.createElement('div');ruler.className='meter-ruler';ruler.setAttribute('aria-hidden','true');
   const rulerTicks=Array.from({length:161},(_,index)=>{
@@ -154,12 +250,28 @@
   });
   meter.addEventListener('focusout',()=>waveAt(null));
   function scrollToProgress(p) { window.scrollTo({ top: p * (journey.offsetHeight - height), behavior: reducedMotion ? 'instant' : 'smooth' }); }
-  $('jump').addEventListener('click', () => scrollToProgress(config.crossingAt + config.crossingDuration * .55));
   $('restart').addEventListener('click', () => scrollToProgress(0));
   $('close-dialog').addEventListener('click', () => dialog.close());
+  const aboutDialog=$('about-dialog');
+  $('about-site').addEventListener('click',()=>aboutDialog.showModal());
+  $('close-about').addEventListener('click',()=>aboutDialog.close());
+  aboutDialog.addEventListener('click',event=>{
+    if(event.target!==aboutDialog)return;
+    const rect=aboutDialog.getBoundingClientRect();
+    if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)aboutDialog.close();
+  });
   dialog.addEventListener('click', event => { if (event.target === dialog) { const rect = dialog.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close(); } });
   function resize() {
     width = document.documentElement.clientWidth; height = document.querySelector('.stage').clientHeight;
+    const crossingEnd=Math.min(.95,clamp(timelineCrossingAt,.1,.8)+timelineCrossingDuration);
+    journey.style.height=`${Math.max(height*12.5,config.after.length*160/(1-crossingEnd)+height)}px`;
+    const meterWidth=meter.clientWidth;
+    meter.classList.toggle('is-dense',eventTicks.length>20);
+    eventTicks.forEach((tick,index)=>{
+      const previous=index?tick.position-eventTicks[index-1].position:1;
+      const next=index<eventTicks.length-1?eventTicks[index+1].position-tick.position:1;
+      tick.marker.style.width=`${clamp(Math.min(previous,next)*meterWidth*.8,4,26)}px`;
+    });
     scene.setAttribute('viewBox', `0 0 ${width} ${height}`); schedule();
   }
   function chapter(index) {
@@ -170,7 +282,6 @@
       ['CHAPTER 03 — TOGETHER', '从此，同一段时间', '让散落的片刻，成为共同故事的注脚。', '我们的后来']
     ];
     const c = chapters[index]; $('chapter-number').textContent = c[0]; $('chapter-title').textContent = c[1]; $('chapter-copy').textContent = c[2]; $('phase-label').textContent = c[3];
-    $('jump').hidden = index !== 0;
     document.querySelector('.chapter').hidden = true;
   }
   function hide(item) {
@@ -214,9 +325,9 @@
   function draw() {
     raf = 0;
     progress = clamp(window.scrollY / Math.max(1, journey.offsetHeight - height));
-    const crossingStart = clamp(config.crossingAt, .1, .8);
-    const crossingEnd = Math.min(.95, crossingStart + config.crossingDuration);
-    const morph = smooth((progress - crossingStart) / config.crossingDuration);
+    const crossingStart = clamp(timelineCrossingAt, .1, .8);
+    const crossingEnd = Math.min(.95, crossingStart + timelineCrossingDuration);
+    const morph = smooth((progress - crossingStart) / timelineCrossingDuration);
     const after = progress >= crossingEnd;
     chapter(progress < crossingStart ? 0 : after ? 2 : 1);
     const cx = width / 2;
@@ -231,14 +342,22 @@
     const unionRadius = Math.min(width * .49, height * .52);
     const travelA = progress / crossingStart * travelBefore;
     const travelB = (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
-    const beforeOpacity = 1 - smooth((progress - crossingStart) / (config.crossingDuration * .55));
+    const beforeOpacity = 1 - smooth((progress - crossingStart) / (timelineCrossingDuration * .55));
     const afterOpacity = smooth((progress - (crossingEnd - .035)) / .035);
-    const transition = clamp((progress-crossingStart)/config.crossingDuration);
+    const transition = clamp((progress-crossingStart)/timelineCrossingDuration);
     const gather = smooth(transition/.55);
     const unfold = smooth((transition-.55)/.45);
-    const finalHeartY = centerY-unionRadius*(mobile ? .64 : .46);
+    const finalHeartY = centerY-unionRadius*(mobile ? .48 : .46);
     const heartY = mix(height*.43, finalHeartY, unfold);
     const size = Math.min(mobile ? 32 : 52, width*.085, unionRadius*.16);
+    const sideMascotOpacity=1-smooth(transition/.55);
+    const mascotY=sideY-(mobile?60:0);
+    for(const [id,x] of [['mascot-left',width*.055],['mascot-right',width*.945]]){
+      const mascot=$(id);mascot.style.left=`${x}px`;mascot.style.top=`${mascotY}px`;mascot.style.opacity=sideMascotOpacity;
+    }
+    const together=$('mascot-together');together.style.left=`${cx}px`;
+    together.style.top=`${finalHeartY-(mobile?60:95)}px`;together.style.opacity=afterOpacity;
+
     const left = `M${cx} ${heartY-size*.15} C${cx-size*.2} ${heartY-size} ${cx-size*1.1} ${heartY-size*.75} ${cx-size*.8} ${heartY} C${cx-size*.6} ${heartY+size*.4} ${cx-size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
     const right = `M${cx} ${heartY-size*.15} C${cx+size*.2} ${heartY-size} ${cx+size*1.1} ${heartY-size*.75} ${cx+size*.8} ${heartY} C${cx+size*.6} ${heartY+size*.4} ${cx+size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
     heartPaths.forEach((path,i)=>{path.setAttribute('d',i?right:left);path.style.strokeDasharray='none';});
@@ -267,8 +386,8 @@
     const lineIn=smooth(transition/.12);
     const dialIn=smooth((transition-.85)/.15);
     $('rails').style.opacity=lineIn*(1-dialIn);
-    tickPaths[0].setAttribute('d',marks(sideX,sideY,r,-1.45,1.45,travelA*.11));
-    tickPaths[1].setAttribute('d',marks(width-sideX,sideY,r,-1.45,1.45,travelA*.11,-1));
+    tickPaths[0].setAttribute('d',marks(sideX,sideY,r,-1.45,1.45,-travelA*.11));
+    tickPaths[1].setAttribute('d',marks(width-sideX,sideY,r,-1.45,1.45,-travelA*.11,-1));
     tickPaths[0].style.opacity=1-lineIn;tickPaths[1].style.opacity=1-lineIn;
     unionArc.setAttribute('d',arc(cx,centerY,unionRadius,-Math.PI+.12,-.12));
     unionArc.style.opacity=0;
@@ -284,7 +403,7 @@
       const phaseOpacity = before ? beforeOpacity : afterOpacity;
       if (phaseOpacity < .001) { hide(item); continue; }
       const delta = (before ? travelA : travelB) - item.event.position;
-      const angle = before ? delta * .11 : -Math.PI / 2 - delta * sharedAngleStep;
+      const angle = before ? -delta * .11 : -Math.PI / 2 - delta * sharedAngleStep;
       const distance = Math.abs(delta * (before ? .11 : sharedAngleStep));
       if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
       const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
@@ -338,7 +457,7 @@
       item.pointer.setAttribute('viewBox',`0 0 ${w} ${h}`);
       item.pointerShape.setAttribute('d',`M${c} 0 ${top} Q${w} 0 ${w} ${c} ${right} Q${w} ${h} ${w-c} ${h} ${bottom} Q0 ${h} 0 ${h-c} ${left} Q0 0 ${c} 0 Z`);
       const time=item.node.querySelector('time');
-      time.hidden=false;time.textContent=item.event.date.slice(5);
+      time.hidden=false;time.textContent=shortDate(item.event.date);
       time.style.left=`${inner.x-node.x}px`;time.style.top=`${inner.y-node.y}px`;
 
       item.button.disabled = fade < .3;
@@ -355,12 +474,11 @@
     const currentDate = after ? focusDate : beforeDate ? beforeDate.item.event.date : config.crossingDate;
     $('current-date').textContent = currentDate.slice(0,4);
     const displayedDate = progress >= crossingStart && !after ? config.crossingDate : currentDate;
-    $('current-time').textContent = displayedDate;
-    $('current-time').dateTime = displayedDate.replaceAll('.', '-');
+    setDate($('current-time'),displayedDate);
     const date = $('heart-date'); date.hidden = !after;
     date.style.left = `${cx}px`; date.style.top = `${centerY-unionRadius*.76}px`;
     date.dateTime = focusDate.replaceAll('.', '-');
-    $('heart-year').textContent = focusDate.slice(0,4); $('heart-day').textContent = focusDate.slice(5);
+    $('heart-year').textContent = focusDate.slice(0,4); $('heart-day').textContent = shortDate(focusDate);
     $('scroll-label').textContent = after ? '滚动向左，翻阅共同的时间' : '向下滚动，转动彼此的时间';
     const ending = $('ending-card');
     // The ending is the next item on the same orbital track. At the end
@@ -392,5 +510,6 @@
   function schedule() { if (!raf) raf = requestAnimationFrame(draw); }
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', resize);
+  setLanguage(language);
   resize();
 })();

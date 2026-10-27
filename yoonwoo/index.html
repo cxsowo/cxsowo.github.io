@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#111316"><meta name="description" content="两条时间轨迹，在某一刻交汇。滚动驱动的双人时间线概念原型。">
-<title>相逢的轨迹 · A & B</title><link rel="stylesheet" href="./style.css?v=20261026-5">
+<title>相逢的轨迹 · 金允植 & 朴时宇</title><link rel="stylesheet" href="./style.css?v=20261027-11">
 </head>
 <body>
 <main id="journey">
 <section class="stage" aria-label="双人时间线，向下滚动推进时间">
 <div class="starfield" id="starfield" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div><div class="ambient" aria-hidden="true"></div>
-<header><time id="current-time" aria-label="当前时间点"></time><button id="jump" type="button">前往交汇 <span aria-hidden="true">↗</span></button></header>
+<div class="timeline-mascot" id="mascot-left" aria-hidden="true"><img src="./images/mascots/wolf.png" alt=""></div><div class="timeline-mascot" id="mascot-right" aria-hidden="true"><img src="./images/mascots/rabbit.png" alt=""></div><div class="timeline-mascot" id="mascot-together" aria-hidden="true"><img src="./images/mascots/together.png" alt=""></div><header><time id="current-time" aria-label="当前时间点"></time><nav id="language-switch" aria-label="选择语言"><button type="button" data-language="zh" lang="zh-CN" aria-pressed="true">中文</button><button type="button" data-language="en" lang="en" aria-pressed="false">English</button><button type="button" data-language="ko" lang="ko" aria-pressed="false">한국어</button></nav></header>
 <div class="chapter"><span id="chapter-number">CHAPTER 01 — BEFORE US</span><h1 id="chapter-title">在相遇之前</h1><p id="chapter-copy">两段各自向前的时间，尚未写下彼此的名字。</p></div>
 <svg id="scene" aria-hidden="true"><defs><linearGradient id="blue-line" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e6faff" stop-opacity=".12"/><stop offset=".6" stop-color="#e6faff"/><stop offset="1" stop-color="#e6faff" stop-opacity=".1"/></linearGradient><linearGradient id="red-line" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde6ff" stop-opacity=".12"/><stop offset=".6" stop-color="#fde6ff"/><stop offset="1" stop-color="#fde6ff" stop-opacity=".1"/></linearGradient><linearGradient id="union-color" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e6faff"/><stop offset=".43" stop-color="#edf3ff"/><stop offset=".56" stop-color="#f3edff"/><stop offset="1" stop-color="#fde6ff"/></linearGradient></defs><g id="rails"><path id="rail-a" stroke="url(#blue-line)"/><path id="rail-b" stroke="url(#red-line)"/></g><g id="heart"><path class="heart-line" stroke="url(#union-color)"/><path class="heart-line" stroke="url(#union-color)"/></g></svg>
 <time id="heart-date" hidden aria-label="当前焦点事件日期"><span id="heart-year"></span><span id="heart-day"></span></time>
@@ -22,7 +22,9 @@
 <div class="bottom"><div class="scroll-cue"><span class="mouse" aria-hidden="true"></span><span id="scroll-label">向下滚动，沿时间向前</span></div><div class="era"><span id="current-date">2023</span><span id="phase-label">各自的序章</span></div><div class="journey-meter"><span>起点</span><div class="meter"><i id="progress"></i><span id="event-ticks" aria-label="事件日期"></span></div><button id="restart" type="button">回到起点 ↑</button></div></div>
 </section>
 </main>
-<dialog id="event-dialog"><button id="close-dialog" type="button" aria-label="关闭事件详情">×</button><span id="detail-owner"></span><time id="detail-date"></time><h2 id="detail-title"></h2><p id="detail-copy"></p><p class="detail-note">这是虚构的示例事件。正式内容可在 data.js 中替换，并添加原文、图片与出处。</p></dialog>
+<dialog id="event-dialog"><button id="close-dialog" type="button" aria-label="关闭事件详情">×</button><span id="detail-owner"></span><time id="detail-date"></time><h2 id="detail-title"></h2><p id="detail-copy"></p><section id="detail-gallery" hidden aria-label="童年相册"><div class="gallery-stage"><button id="gallery-prev" type="button" aria-label="上一张">‹</button><img id="gallery-image" alt=""><button id="gallery-next" type="button" aria-label="下一张">›</button></div><p id="gallery-counter" aria-live="polite"></p><div id="gallery-thumbs"></div></section></dialog>
+<button id="about-site" type="button" aria-haspopup="dialog" aria-controls="about-dialog">❤️关于本站</button>
+<dialog id="about-dialog" aria-labelledby="about-title"><button id="close-about" type="button" aria-label="关闭关于本站">×</button><h2 id="about-title">关于本站</h2><p id="about-copy"></p><p id="about-love"></p><p class="about-contact"><span id="about-contact-label">联系邮箱</span><a href="mailto:cxsowo@163.com">cxsowo@163.com</a></p></dialog>
 <noscript><p class="no-script">此交互时间线需要启用 JavaScript。</p></noscript>
-<script src="./data.js?v=20261026-5"></script><script src="./app.js?v=20261026-5"></script>
+<script src="./data.js?v=20261027-11"></script><script src="./locales.js?v=20261027-11"></script><script src="./app.js?v=20261027-11"></script>
 </body></html>
