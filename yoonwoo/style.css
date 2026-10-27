@@ -252,3 +252,20 @@ dialog p{color:#dfdde5}
 #gallery-thumbs button{background:#10162066;border-color:#ffffff26}
 #about-dialog .about-contact{border-top-color:#ffffff26}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){dialog{background:#252b36f2}}
+
+/* Explicit geometry avoids mobile button defaults and font baseline offsets. */
+#close-dialog,#close-about,#gallery-prev,#gallery-next{
+  -webkit-appearance:none;appearance:none;box-sizing:border-box;
+  display:grid;place-items:center;padding:0;line-height:1;
+}
+#close-dialog,#close-about{
+  width:36px;height:36px;min-width:36px;min-height:36px;
+  max-width:36px;max-height:36px;aspect-ratio:1;flex:none;border-radius:50%;
+}
+#close-dialog svg,#close-about svg,#gallery-prev svg,#gallery-next svg{
+  display:block;width:20px;height:20px;fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;
+}
+#gallery-prev svg,#gallery-next svg{width:22px;height:22px}
+
+#cards>.event .card-footer{justify-content:flex-end}

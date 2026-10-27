@@ -71,7 +71,8 @@
   });
   if(!reducedMotion)sparkle();
   const cards = [];
-  const labelFor = event => event.person === 'both' ? `${tr('pairName')} · ${tr('shared')}` : `${personName(event.person)} · ${tr('single')}`;
+  const ownerFor = event => event.person === 'both' ? tr('pairName') : personName(event.person);
+  const labelFor = event => `${ownerFor(event)} · ${tr(event.person === 'both' ? 'shared' : 'single')}`;
   const artworkLabels = { mountain: 'Somewhere, a beginning', window: 'A window into time', moon: 'Under the same moon', union: 'Two lives, one moment' };
   function createEvent(event, phase) {
     const button = document.createElement('button');
@@ -91,8 +92,7 @@
     const title = document.createElement('h2'); title.textContent = event.title;
     const copy = document.createElement('p'); copy.textContent = event.text;
     const foot = document.createElement('div'); foot.className = 'card-footer';
-    const footLabel = document.createElement('span'); footLabel.textContent = '示例事件 · 查看详情';
-    const arrow = document.createElement('b'); arrow.textContent = '↗'; foot.append(footLabel, arrow);
+    const arrow = document.createElement('b'); arrow.textContent = '↗'; arrow.setAttribute('aria-hidden','true'); foot.append(arrow);
     button.append(art, head, title, copy, foot);
     button.addEventListener('click', () => {
       openedEvent=event; updateDetail(event); dialog.showModal();
@@ -161,7 +161,7 @@
   });
   function updateDetail(event){
     const content=eventContent(event);
-    $('detail-owner').textContent=labelFor(event);$('detail-date').textContent=event.date;
+    $('detail-owner').textContent=ownerFor(event);$('detail-date').textContent=event.date;
     setDate($('detail-date'),event.date);
     $('detail-title').textContent=content.title;$('detail-copy').textContent=content.text;
     if(galleryEvent!==event){galleryEvent=event;galleryIndex=0;}
@@ -207,7 +207,7 @@
     document.querySelector('.journey-meter>span').textContent=tr('start');
     $('about-site').textContent=tr('aboutButton');$('about-title').textContent=tr('aboutTitle');
     $('about-copy').textContent=tr('aboutCopy');$('about-love').textContent=tr('aboutLove');
-    $('about-contact-label').textContent=tr('aboutContact');$('close-about').setAttribute('aria-label',tr('closeAbout'));
+    $('close-about').setAttribute('aria-label',tr('closeAbout'));
     $('restart').textContent=tr('restart');$('close-dialog').setAttribute('aria-label',tr('close'));
     document.querySelector('#crossing-label>span').textContent=tr('moment');
     document.querySelector('#crossing-label>p').textContent=eventContent(config.after.find(event=>event.id==='first-meeting')||{title:'',text:tr('crossing')}).text;
@@ -216,7 +216,6 @@
       button.querySelector('h2').textContent=content.title;button.querySelector('p').textContent=content.text;
       setDate(button.querySelector('.event-head time'),item.event.date);
       button.querySelector('.event-head>span').textContent=item.event.person==='both'?tr('pairName'):personName(item.event.person);
-      button.querySelector('.card-footer>span').textContent=item.event.images?.length?`${item.event.images.length} ${tr('photos')} · ${tr('details')}`:tr('sample');
       button.querySelector('.art-caption').textContent=tr('artwork')[item.event.art] || tr('artwork').moon;
       button.setAttribute('aria-label',`${item.event.date}，${labelFor(item.event)}，${content.title}，${tr('details')}`);
     }
