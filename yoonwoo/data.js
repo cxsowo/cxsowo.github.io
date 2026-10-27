@@ -42,8 +42,8 @@ window.TIMELINE_CONFIG = {
       "id": "siwoo-birth",
       "person": "b",
       "date": "2001.02.05",
-      "title": "朴时宇出生",
-      "text": "2001 年 2 月 5 日，朴时宇出生。",
+      "title": "朴时宇出生了~",
+      "text": "2001 年 2 月 5 日，朴时宇出生了~",
       "art": "moon",
       "position": 1.5,
       "cover": "./images/siwoo-birth/02.png",
@@ -108,7 +108,7 @@ window.TIMELINE_CONFIG = {
       "id": "first-meeting",
       "person": "both",
       "date": "2025.11",
-      "title": "第一次见面",
+      "title": "第一次见面~",
       "text": "金允植试镜，俩人第一次见面~",
       "art": "union",
       "position": 3
@@ -778,15 +778,6 @@ window.TIMELINE_CONFIG = {
       "text": "fromm 群聊关闭，并有剧中台词 callback；允植分享雨天、休息与剧照，时宇分享日常。更新表将部分图片拼成爱心的说法作为图片编排观察保留。",
       "art": "union",
       "position": 373
-    },
-    {
-      "id": "shared-2026-09-01",
-      "person": "both",
-      "date": "2026.09.01",
-      "title": "已知双人合作留档",
-      "text": "截至原记录整理时：loading、费加罗、势界、工牌回家、施洛华眼镜、snackpaper，以及官周 1.0／2.0 等双人合作。品牌及项目名暂按原记录保留。",
-      "art": "mountain",
-      "position": 378
     },
     {
       "id": "shared-2026-10-01",

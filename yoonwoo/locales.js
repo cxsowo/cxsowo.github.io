@@ -37,7 +37,8 @@ window.TIMELINE_LOCALES = {
     "aboutCopy": "本站仅作为个人存档使用，资料来源于网络，已尽量选用可信资料。如有侵权，可联系删除。",
     "aboutLove": "为爱发电，浑身使不完的牛劲产物。",
     "aboutContact": "联系邮箱",
-    "closeAbout": "关闭关于本站"
+    "closeAbout": "关闭关于本站",
+    "pairName": "植时"
   },
   "en": {
     "pageTitle": "The Lines That Led to Us",
@@ -75,7 +76,8 @@ window.TIMELINE_LOCALES = {
     "aboutCopy": "This site is a personal archive. Materials come from the internet, and I have tried to use reliable sources. If any content infringes your rights, please contact me to request its removal.",
     "aboutLove": "A labour of love, powered by an almost ridiculous amount of energy.",
     "aboutContact": "Contact",
-    "closeAbout": "Close about this site"
+    "closeAbout": "Close about this site",
+    "pairName": "yoonwoo"
   },
   "ko": {
     "pageTitle": "만남의 궤적 · 金允植 & 朴时宇",
@@ -113,7 +115,8 @@ window.TIMELINE_LOCALES = {
     "aboutCopy": "개인 기록 보관을 위해 만든 사이트예요. 자료는 인터넷에서 수집했으며, 가능한 한 신뢰할 수 있는 자료를 사용하려고 노력했어요. 권리 침해가 있는 경우 아래 이메일로 연락해 주시면 삭제하겠습니다.",
     "aboutLove": "좋아하는 마음과 넘치는 열정으로, 힘이 남아돌아 만든 공간이에요.",
     "aboutContact": "문의 이메일",
-    "closeAbout": "사이트 소개 닫기"
+    "closeAbout": "사이트 소개 닫기",
+    "pairName": "yoonwoo"
   }
 };
 window.TIMELINE_EVENT_TRANSLATIONS = {
@@ -169,11 +172,11 @@ window.TIMELINE_EVENT_TRANSLATIONS = {
   },
   "first-meeting": {
     "en": {
-      "title": "Their first meeting",
+      "title": "Their first meeting~",
       "text": "kimyoonsik’s audition, and the first time they met~"
     },
     "ko": {
-      "title": "두 사람의 첫 만남",
+      "title": "두 사람의 첫 만남~",
       "text": "김윤식의 오디션을 계기로 두 사람이 처음 만났어요~"
     }
   },
@@ -207,24 +210,14 @@ window.TIMELINE_EVENT_TRANSLATIONS = {
       "text": "INUFF에서 처음으로 신인 배우 모집을 시작했어요."
     }
   },
-  "siwoo-now": {
-    "en": {
-      "title": "Actor and company representative",
-      "text": "Continues acting while running INUFF as its representative and an affiliated artist."
-    },
-    "ko": {
-      "title": "배우이자 회사 대표로",
-      "text": "배우 활동을 이어가면서 INUFF의 대표이자 소속 아티스트로 회사도 운영하고 있어요."
-    }
-  },
   "siwoo-birth": {
     "en": {
-      "title": "parksiwoo was born",
-      "text": "parksiwoo was born on February 5, 2001. A collection of his childhood photos."
+      "title": "parksiwoo was born~",
+      "text": "On February 5, 2001, parksiwoo was born~"
     },
     "ko": {
-      "title": "박시우의 탄생",
-      "text": "2001년 2월 5일, 박시우가 태어났어요. 어린 시절 사진을 함께 모아봤어요."
+      "title": "박시우가 태어났어요~",
+      "text": "2001년 2월 5일, 박시우가 태어났어요~"
     }
   },
   "shared-2026-01": {
@@ -795,16 +788,6 @@ window.TIMELINE_EVENT_TRANSLATIONS = {
     "ko": {
       "title": "단체 채팅 종료와 드라마 추억",
       "text": "fromm 단체 채팅이 종료되고 드라마 대사를 다시 언급했어요. 윤식은 비 오는 날과 휴식, 드라마 사진을 공유했어요. 사진 배치가 하트처럼 보인다는 내용은 원자료의 관찰이에요."
-    }
-  },
-  "shared-2026-09-01": {
-    "en": {
-      "title": "Joint projects archive",
-      "text": "An archive of joint projects listed in the notes: loading, Figaro, 势界, 工牌回家, 施洛华眼镜, snackpaper and official merchandise 1.0/2.0. Names are retained as supplied."
-    },
-    "ko": {
-      "title": "둘이 함께한 프로젝트 모음",
-      "text": "원자료에 정리된 loading, Figaro, 势界, 工牌回家, 施洛华眼镜, snackpaper와 공식 굿즈 1.0·2.0 등의 기록이에요. 명칭은 제공된 표기를 유지했어요."
     }
   },
   "shared-2026-10-01": {

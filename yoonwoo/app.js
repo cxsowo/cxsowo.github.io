@@ -71,7 +71,7 @@
   });
   if(!reducedMotion)sparkle();
   const cards = [];
-  const labelFor = event => event.person === 'both' ? `${personName('a')} + ${personName('b')} · ${tr('shared')}` : `${personName(event.person)} · ${tr('single')}`;
+  const labelFor = event => event.person === 'both' ? `${tr('pairName')} · ${tr('shared')}` : `${personName(event.person)} · ${tr('single')}`;
   const artworkLabels = { mountain: 'Somewhere, a beginning', window: 'A window into time', moon: 'Under the same moon', union: 'Two lives, one moment' };
   function createEvent(event, phase) {
     const button = document.createElement('button');
@@ -87,7 +87,7 @@
     }
     const head = document.createElement('div'); head.className = 'event-head';
     const date = document.createElement('time'); setDate(date,event.date);
-    const owner = document.createElement('span'); owner.textContent = event.person === 'both' ? 'A + B' : personName(event.person); head.append(date, owner);
+    const owner = document.createElement('span'); owner.textContent = event.person === 'both' ? tr('pairName') : personName(event.person); head.append(date, owner);
     const title = document.createElement('h2'); title.textContent = event.title;
     const copy = document.createElement('p'); copy.textContent = event.text;
     const foot = document.createElement('div'); foot.className = 'card-footer';
@@ -215,7 +215,7 @@
       const content=eventContent(item.event),button=item.button;
       button.querySelector('h2').textContent=content.title;button.querySelector('p').textContent=content.text;
       setDate(button.querySelector('.event-head time'),item.event.date);
-      button.querySelector('.event-head>span').textContent=item.event.person==='both'?`${personName('a')} + ${personName('b')}`:personName(item.event.person);
+      button.querySelector('.event-head>span').textContent=item.event.person==='both'?tr('pairName'):personName(item.event.person);
       button.querySelector('.card-footer>span').textContent=item.event.images?.length?`${item.event.images.length} ${tr('photos')} · ${tr('details')}`:tr('sample');
       button.querySelector('.art-caption').textContent=tr('artwork')[item.event.art] || tr('artwork').moon;
       button.setAttribute('aria-label',`${item.event.date}，${labelFor(item.event)}，${content.title}，${tr('details')}`);
@@ -335,6 +335,7 @@
     dialClipRect.setAttribute('width',width);
     dialClipRect.setAttribute('height',Math.max(0,navigationTop-28));
     const mobile = width <= 600;
+    const compactCards = width <= 1000;
     const r = width * (mobile ? .28 : .29);
     const sideY = height * .49;
     const sideX = -r * .40;
@@ -408,9 +409,10 @@
       if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
       const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
       const scale = 1 - Math.min(.24, distance * .15);
-      const cardWidth = mobile ? Math.min(180, width * .32) : Math.min(310, width * .20);
-      const cardHeight = mobile ? Math.min(220, height * .28) : Math.min(300, height * .32);
+      const cardWidth = mobile ? Math.min(180, width * .34, height * .38) : compactCards ? Math.min(260, width * .28, height * .38) : Math.min(310, width * .20);
+      const cardHeight = compactCards ? cardWidth / 1.08 : Math.min(300, height * .32);
       item.button.style.width = `${cardWidth}px`; item.button.style.height = `${cardHeight}px`;
+      item.button.style.setProperty('--card-width',`${cardWidth}px`);
       item.button.style.minHeight = '0'; item.button.hidden = false;
       let center, node, rotation, inner;
       if (before) {
@@ -508,6 +510,44 @@
     rulerTicks.forEach((tick,index)=>tick.classList.toggle('is-active',index===activeIndex));
   }
   function schedule() { if (!raf) raf = requestAnimationFrame(draw); }
+  // Horizontal touch gestures advance the shared dial using the same scroll position.
+  const swipeStage=document.querySelector('.stage');
+  let swipeGesture=null,swipeClickUntil=0;
+  swipeStage.addEventListener('touchstart',event=>{
+    swipeGesture=null;swipeClickUntil=0;
+    if(event.touches.length!==1||document.querySelector('dialog[open]')||event.target.closest('header,.bottom'))return;
+    const maxScroll=Math.max(1,journey.offsetHeight-height);
+    const crossingEnd=Math.min(.95,clamp(timelineCrossingAt,.1,.8)+timelineCrossingDuration);
+    if(window.scrollY/maxScroll<crossingEnd)return;
+    const touch=event.touches[0];
+    swipeGesture={startX:touch.clientX,startY:touch.clientY,lastX:touch.clientX,axis:null};
+  },{passive:true});
+  swipeStage.addEventListener('touchmove',event=>{
+    if(!swipeGesture)return;
+    if(event.touches.length!==1){swipeGesture=null;return;}
+    const touch=event.touches[0];
+    const dx=touch.clientX-swipeGesture.startX,dy=touch.clientY-swipeGesture.startY;
+    if(!swipeGesture.axis){
+      if(Math.max(Math.abs(dx),Math.abs(dy))<10)return;
+      swipeGesture.axis=Math.abs(dx)>Math.abs(dy)*1.2?'horizontal':'vertical';
+    }
+    if(swipeGesture.axis!=='horizontal')return;
+    if(!event.cancelable){swipeGesture=null;return;}
+    event.preventDefault();
+    // Include the initial movement once the direction is clear, then follow the finger.
+    const delta=swipeGesture.lastX-touch.clientX;
+    swipeGesture.lastX=touch.clientX;
+    swipeClickUntil=Date.now()+500;
+    const maxScroll=Math.max(0,journey.offsetHeight-height);
+    window.scrollTo({top:clamp(window.scrollY+delta*1.2,0,maxScroll),behavior:'instant'});
+  },{passive:false});
+  const finishSwipe=()=>{if(swipeGesture?.axis==='horizontal')swipeClickUntil=Date.now()+500;swipeGesture=null;};
+  swipeStage.addEventListener('touchend',finishSwipe,{passive:true});
+  swipeStage.addEventListener('touchcancel',finishSwipe,{passive:true});
+  // Swiping over a card should not also open its details when the finger lifts.
+  swipeStage.addEventListener('click',event=>{
+    if(Date.now()<swipeClickUntil){event.preventDefault();event.stopImmediatePropagation();}
+  },{capture:true});
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', resize);
   setLanguage(language);
