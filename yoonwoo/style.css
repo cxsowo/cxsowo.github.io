@@ -326,7 +326,9 @@ dialog p{color:#dfdde5}
 
 #open-guestbook{border:1px solid #ffffff38;border-radius:999px;padding:10px 22px;background:#ffffff08;color:var(--blue);font:inherit;font-weight:650;text-decoration:none;transition:background .2s,border-color .2s}
 #open-guestbook:hover{background:#ffffff12;border-color:#ffffff70}
-#guestbook-dialog{width:calc(100% - 32px);max-width:760px;max-height:88svh;overflow-y:auto;overscroll-behavior:contain}
+#guestbook-dialog{width:calc(100% - 32px);max-width:760px;height:min(780px,88svh);max-height:88svh;overflow:hidden;overscroll-behavior:contain}
+#guestbook-dialog[open]{display:flex;flex-direction:column}
+#guestbook-dialog>h2,#guestbook-status,.guestbook-recovery{flex:none}
 #guestbook-title{margin:0 44px 24px 0;font-size:24px;letter-spacing:1px}
 #close-guestbook{position:absolute;right:16px;top:16px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;display:grid;place-items:center;border:0;border-radius:50%;background:transparent;color:#eeeaf3;-webkit-appearance:none;appearance:none}
 #close-guestbook:hover{background:#ffffff14}
@@ -346,9 +348,9 @@ dialog p{color:#dfdde5}
   }
 }
 
-#guestbook-widget{width:100%;min-height:220px;margin-top:14px}
-#guestbook-widget .utterances{max-width:100%}
-#guestbook-widget .utterances-frame{color-scheme:dark}
+#guestbook-widget{width:100%;flex:1;min-height:0;margin-top:0;overflow:hidden}
+#guestbook-widget .giscus{height:100%;min-height:0}
+#guestbook-widget .giscus-frame{display:block;width:100%;height:100%!important;min-height:0!important;border:0;background:transparent;color-scheme:dark}
 
 /* Cards show titles only; full prose is rendered in the dialog. */
 #cards>.event{display:flex;flex-direction:column}

@@ -1,27 +1,27 @@
-# 留言板：Utterances
+# 留言板：giscus
 
-留言弹窗使用 Utterances 官方组件，数据存放在 GitHub Issues，不需要自建后端、云数据库或 OAuth 应用，也不需要向静态页面填写密钥。
+留言存放在 GitHub Discussions，访客通过 giscus 官方 GitHub 登录发表留言。静态页面不保存密钥，也不需要自建后端。
 
-## 当前配置
+## 配置
 
-`guestbook-config.js`：
+`guestbook-config.js` 保存公开配置：
 
-- `repo`：`nomiiiowo/nomiiiowo.github.io`
-- `issueTerm`：`yoonwoo-guestbook`（固定标识，所有语言及本地预览共用同一帖）
-- `theme`：`github-dark`
+- 仓库：`nomiiiowo/nomiiiowo.github.io`
+- 仓库 ID：`R_kgDOJG_jDg`
+- 分类：`Announcements`（`DIC_kwDOJG_jDs4DJzZ6`）
+- 固定标题：`yoonwoo-guestbook`，所有语言与本地预览共用同一讨论。
+- 主题：`guestbook-theme.css`，与页面一起部署。主题地址必须可以公开访问并返回 CORS 响应头；GitHub Pages 支持此用法。本地预览服务器也需要允许跨域加载该 CSS。
 
-组件在首次打开留言板时加载。首次留言时由 Utterances 自动创建对应 Issue；访客通过 GitHub 登录并授权发表留言。站长可以在仓库 Issues 中查看、回复及管理留言。
+2026-10-28 已确认 giscus 仅授权本站仓库，权限为读取元数据及读写 Discussions；仓库 Discussions 已开启。原 Utterances Issue #1 已转换为 Discussion #2，原留言及作者保留。旧 Issue 会关闭、锁定并指向新讨论。
 
-## GitHub 配置状态
+## 布局与语言
 
-2026-10-27 已在 GitHub 安装设置页确认：Utterances 已安装，仅授权 `nomiiiowo/nomiiiowo.github.io`，权限为读取元数据及读写 Issues；仓库 Issues 已启用。
+组件首次打开弹窗时才加载；关闭再打开不会重复创建。`data-input-position="top"` 配合自定义主题，将输入框固定在上部，下方 `.gsc-timeline` 留言列表独立纵向滚动。弹窗和 iframe 不承担整页滚动。
 
-本地组件曾出现加载失败。按用户要求，待上线后再验证加载、访客登录及发表留言，不将安装成功视为发表功能已经验证。没有主动发布测试留言。
+留言板跟随页面中、英、韩三语切换，分别使用 giscus 的 `zh-CN`、`en`、`ko`。语言变化通过官方 `setConfig` 消息更新，不重新创建 iframe。留言本身保留用户原文，不自动翻译。
 
-## 界面与回调
+GitHub 登录返回时，官方脚本处理 `giscus` 回调参数；代码不读取或记录会话值。组件消息只接受 `https://giscus.app` 且来源为当前留言 iframe 的窗口。网络加载失败时可重试。
 
-弹窗及其入口沿用网站中英韩文案；Utterances 内部文案、输入框与留言列表布局由组件提供。跨域 iframe 无法直接改成网站自绘表单。关闭再打开不会重复创建组件；网络失败可重试。
+已在本地加载原留言并验证中英韩切换。将组件视口缩到 340 × 400 时，留言列表可独立滚动，输入框与页面滚动位置保持不变。未主动发表测试留言；发表与访客授权流程需用户实际使用时确认。
 
-GitHub 登录返回时，若网址含 Utterances 的回调参数，页面会自动打开留言板，让官方脚本处理并清除参数；代码不读取或记录会话值。组件消息仅接受 `https://utteranc.es` 且来源为当前留言 iframe 的窗口。
-
-官方说明：https://utteranc.es/
+官方文档：[giscus](https://giscus.app/zh-CN)、[高级配置](https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md)。
