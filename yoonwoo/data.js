@@ -322,10 +322,16 @@ window.TIMELINE_CONFIG = {
       "id": "shared-2026-06-29",
       "person": "both",
       "date": "2026.06.29",
-      "title": "IG 酒馆照片",
-      "text": "酒馆里的环抱与牵手照片\n\nIG 酒馆环抱照、牵手照及“怎么醉成这样”的相关记录。（待补资料）",
+      "title": "金允植ins发图成就第一版镇圈神图~",
+      "text": "盘点镇圈神图必有此图！",
       "art": "mountain",
-      "position": 88
+      "position": 88,
+      "cover": "./images/2026-06-29/01.jpg",
+      "coverPosition": "50% 15%",
+      "images": [
+        "./images/2026-06-29/01.jpg",
+        "./images/2026-06-29/02.png"
+      ]
     },
     {
       "id": "shared-2026-07-01",

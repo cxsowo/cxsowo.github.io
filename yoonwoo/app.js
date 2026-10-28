@@ -183,6 +183,7 @@
     const state={blockIndex,index:initialIndex,show:null};
     const caption=block.label||tr(event.id.endsWith('-birth')?'childhoodPhotos':'photoAlbum');
     section.setAttribute('aria-label',caption);
+    section.querySelector('.gallery-open').setAttribute('aria-label',tr('openImage'));
     for(const gradient of section.querySelectorAll('linearGradient')){
       const side=gradient.id.includes('prev')?'prev':'next';
       gradient.id=`gallery-${side}-${event.id}-${blockIndex}`;
@@ -227,7 +228,9 @@
         const paragraph=document.createElement('p');paragraph.className='detail-text';paragraph.textContent=block.text||'';fragment.append(paragraph);
       }else if(block.type==='image'){
         const figure=document.createElement('figure'),image=document.createElement('img');figure.className='detail-image';
-        image.src=block.src;image.alt=block.alt||'';image.loading='lazy';image.decoding='async';figure.append(image);fragment.append(figure);
+        image.src=block.src;image.alt=block.alt||'';image.loading='lazy';image.decoding='async';
+        const open=document.createElement('button');open.type='button';open.className='detail-image-open';open.setAttribute('aria-label',tr('openImage'));
+        open.append(image);figure.append(open);fragment.append(figure);
       }else if(block.type==='gallery'&&block.images?.length){
         fragment.append(createDetailGallery(block,index,event,previousIndices.get(index)||0));
       }
@@ -273,6 +276,28 @@
     const tick=document.createElement('i');tick.style.left=`${index/rulerIntervals*100}%`;tick.style.setProperty('--ruler-color',rulerColor(index/rulerIntervals));ruler.append(tick);return tick;
   });
   meter.prepend(ruler);
+  let hoveredRulerIndex=null;
+  function waveAt(index){
+    if(index===hoveredRulerIndex)return;
+    hoveredRulerIndex=index;
+    rulerTicks.forEach((tick,tickIndex)=>{
+      const distance=index===null?Infinity:Math.abs(tickIndex-index);
+      const height=4+10*Math.exp(-Math.pow(distance/3.5,2));
+      tick.style.setProperty('--hover-height',`${height.toFixed(2)}px`);
+    });
+  }
+  meter.addEventListener('pointermove',event=>{
+    if(event.pointerType==='touch')return;
+    const marker=event.target.closest('.event-tick');
+    const entry=eventTicks.find(tick=>tick.marker===marker);
+    waveAt(entry?.rulerIndex??null);
+  });
+  meter.addEventListener('pointerleave',()=>waveAt(null));
+  meter.addEventListener('focusin',event=>{
+    const entry=eventTicks.find(tick=>tick.marker===event.target);
+    waveAt(entry?.rulerIndex??null);
+  });
+  meter.addEventListener('focusout',()=>waveAt(null));
   function scrollToProgress(p) { window.scrollTo({ top: p * (journey.offsetHeight - height), behavior: reducedMotion ? 'instant' : 'smooth' }); }
   $('restart').addEventListener('click', () => scrollToProgress(0));
   $('close-dialog').addEventListener('click', () => dialog.close());
@@ -369,6 +394,10 @@
     const sideX = -r * .40;
     const centerY = height * (mobile ? .94 : 1.04);
     const unionRadius = Math.min(width * .49, height * .52);
+    const cardWidth = mobile ? Math.min(200, width * .40, height * .38) : compactCards ? Math.min(260, width * .28, height * .38) : Math.min(310, width * .20);
+    const cardHeight = compactCards ? cardWidth / 1.08 : Math.min(300, height * .32);
+    const topSpace = centerY-unionRadius-cardHeight-32;
+    const upperMascot = compactCards && topSpace>190;
     dialGradient.setAttribute('x1',cx-unionRadius);dialGradient.setAttribute('x2',cx+unionRadius);
     const travelA = progress / crossingStart * travelBefore;
     const travelB = (progress - crossingEnd) / (1 - crossingEnd) * travelAfter;
@@ -377,7 +406,9 @@
     const transition = clamp((progress-crossingStart)/timelineCrossingDuration);
     const gather = smooth(transition/.55);
     const unfold = smooth((transition-.55)/.45);
-    const finalHeartY = centerY-unionRadius*(mobile ? .48 : .46);
+    const finalHeartY = upperMascot
+      ? (centerY-unionRadius+navigationTop-28)/2
+      : centerY-unionRadius*(mobile ? .48 : .46);
     const heartY = mix(height*.43, finalHeartY, unfold);
     const size = Math.min(mobile ? 32 : 52, width*.085, unionRadius*.16);
     const sideMascotOpacity=1-smooth(transition/.55);
@@ -386,7 +417,8 @@
       const mascot=$(id);mascot.style.left=`${x}px`;mascot.style.top=`${mascotY}px`;mascot.style.opacity=sideMascotOpacity;
     }
     const together=$('mascot-together');together.style.left=`${cx}px`;
-    together.style.top=`${finalHeartY-(mobile?60:95)}px`;together.style.opacity=afterOpacity;
+    const togetherY=upperMascot?Math.min(height*.25,(96+topSpace-24)/2):finalHeartY-(mobile?60:95);
+    together.style.top=`${togetherY}px`;together.style.opacity=afterOpacity;
 
     const left = `M${cx} ${heartY-size*.15} C${cx-size*.2} ${heartY-size} ${cx-size*1.1} ${heartY-size*.75} ${cx-size*.8} ${heartY} C${cx-size*.6} ${heartY+size*.4} ${cx-size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
     const right = `M${cx} ${heartY-size*.15} C${cx+size*.2} ${heartY-size} ${cx+size*1.1} ${heartY-size*.75} ${cx+size*.8} ${heartY} C${cx+size*.6} ${heartY+size*.4} ${cx+size*.15} ${heartY+size*.65} ${cx} ${heartY+size*.8}`;
@@ -438,8 +470,6 @@
       if (distance > (before ? 1.5 : 1.38)) { hide(item); continue; }
       const fade = phaseOpacity * (1 - smooth((distance - .95) / .5));
       const scale = 1 - Math.min(.24, distance * .15);
-      const cardWidth = mobile ? Math.min(200, width * .40, height * .38) : compactCards ? Math.min(260, width * .28, height * .38) : Math.min(310, width * .20);
-      const cardHeight = compactCards ? cardWidth / 1.08 : Math.min(300, height * .32);
       item.button.style.width = `${cardWidth}px`; item.button.style.height = `${cardHeight}px`;
       item.button.style.setProperty('--card-width',`${cardWidth}px`);
       item.button.style.minHeight = '0'; item.button.hidden = false;

@@ -54,7 +54,18 @@ window.TIMELINE_LOCALES = {
     "guestbookPostError": "发表失败，内容已保留，请稍后重试。",
     "guestbookPosted": "留言已发表。",
     "guestbookReady": "",
-    "guestbookRetry": "重试"
+    "guestbookRetry": "重试",
+    "openImage": "查看大图",
+    "imagePreview": "图片预览",
+    "imageTools": "图片工具",
+    "closeImage": "关闭图片预览",
+    "flipHorizontal": "水平镜像",
+    "flipVertical": "垂直翻转",
+    "rotateLeft": "向左旋转",
+    "rotateRight": "向右旋转",
+    "zoomOut": "缩小",
+    "zoomIn": "放大",
+    "resetImage": "还原"
   },
   "en": {
     "pageTitle": "The Lines That Led to Us",
@@ -109,7 +120,18 @@ window.TIMELINE_LOCALES = {
     "guestbookPostError": "Your message was not posted. Your draft is still here; please try again later.",
     "guestbookPosted": "Your message has been posted.",
     "guestbookReady": "",
-    "guestbookRetry": "Try again"
+    "guestbookRetry": "Try again",
+    "openImage": "View full image",
+    "imagePreview": "Image preview",
+    "imageTools": "Image tools",
+    "closeImage": "Close image preview",
+    "flipHorizontal": "Mirror horizontally",
+    "flipVertical": "Flip vertically",
+    "rotateLeft": "Rotate left",
+    "rotateRight": "Rotate right",
+    "zoomOut": "Zoom out",
+    "zoomIn": "Zoom in",
+    "resetImage": "Reset"
   },
   "ko": {
     "pageTitle": "만남의 궤적 · 金允植 & 朴时宇",
@@ -164,7 +186,18 @@ window.TIMELINE_LOCALES = {
     "guestbookPostError": "등록하지 못했어요. 작성한 내용은 그대로 있으니 잠시 후 다시 시도해 주세요.",
     "guestbookPosted": "글이 등록됐어요.",
     "guestbookReady": "",
-    "guestbookRetry": "다시 시도"
+    "guestbookRetry": "다시 시도",
+    "openImage": "이미지 크게 보기",
+    "imagePreview": "이미지 미리보기",
+    "imageTools": "이미지 도구",
+    "closeImage": "이미지 미리보기 닫기",
+    "flipHorizontal": "좌우 반전",
+    "flipVertical": "상하 반전",
+    "rotateLeft": "왼쪽으로 회전",
+    "rotateRight": "오른쪽으로 회전",
+    "zoomOut": "축소",
+    "zoomIn": "확대",
+    "resetImage": "원래대로"
   }
 };
 window.TIMELINE_EVENT_TRANSLATIONS = {
@@ -392,12 +425,12 @@ window.TIMELINE_EVENT_TRANSLATIONS = {
   },
   "shared-2026-06-29": {
     "en": {
-      "title": "Tavern photos on IG",
-      "text": "Hugs and hand-holding in tavern photos\n\nTavern photos and the comment about being drunk were noted. Supporting material is still needed."
+      "title": "kimyoonsik’s Instagram post gave us the first iconic yoonwoo photo~",
+      "text": "No roundup of iconic yoonwoo photos would be complete without this one!"
     },
     "ko": {
-      "title": "IG 술집 사진",
-      "text": "술집 사진 속 포옹과 손잡기\n\n술집에서의 포옹·손잡은 사진과 취했다는 말이 기록되어 있어요. 관련 자료는 추후 보완할 예정이에요."
+      "title": "김윤식 인스타 사진, yoonwoo 첫 레전드 짤 탄생~",
+      "text": "레전드 짤 모음에 이 사진은 빠질 수 없죠!"
     }
   },
   "shared-2026-07-01": {
